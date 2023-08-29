@@ -1,0 +1,1 @@
+call build\vcpkg_installed\x64-windows\tools\tracy\tracy.exe

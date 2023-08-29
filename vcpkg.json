@@ -1,0 +1,10 @@
+{
+	"$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+	"name": "cppnext",
+	"version": "0.0.1",
+	"dependencies": [
+		{ "name": "fmt", "version>=": "9.1.0", "host": true },		
+		{ "name": "tracy", "version>=": "0.9.0", "features" : ["gui-tools"], "host": true }
+	],
+	"builtin-baseline": "95252eadd63118201b0d0df0b4360fa613f0de84"
+}
