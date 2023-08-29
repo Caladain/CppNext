@@ -1,9 +1,9 @@
-CppNext is an experimental compiler for a potential CppNext syntax.  Currently it exists to transpile CppNext (.cppn) files to standard, human readable Cpp files. This compiler is a work in progress, and support is welcome!
+**CppNext** is an experimental compiler for a potential CppNext syntax.  Currently it exists to transpile CppNext (.cppn) files to **standard, human readable Cpp files**. This compiler is a **work in progress**, and all support is welcome (evne if you just want to hang out and chat :-) )!
 
-Goals:
+## Goals: 
 CppNext aims to offer a transformative, but very familiar syntax to existing Cpp developers, while "fixing" some of the more annoying footguns in the language and providing a ramp for increased safety and better error messages.
 
-Aims:
+## Aims:
 None of the listed below targets are set in stone.  More may be added, some may be removed or changed.
 1.) 100% interoperability with existing Cpp codebases, including support for templates and normal Cpp.
 2.) Pure compile time programming made easy:  Compile time programming is done in normal CppNext.
@@ -21,5 +21,5 @@ None of the listed below targets are set in stone.  More may be added, some may 
 14.) UTF8 by default.
 15.) All Three major platforms (windows, mac, linux) will be treated as first class targets.
 
-Structure and Leadership:
+## Structure and Leadership:
 An inclusive space, where all are welcome.  For now it's just a one-person show, but if you feel interested in participating, greetings!  All communication/decisions will be in the public space.  For now, we'll adopt the Linux Contributor Code of Conduct.
