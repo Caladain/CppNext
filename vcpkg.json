@@ -3,8 +3,9 @@
 	"name": "cppnext",
 	"version": "0.0.1",
 	"dependencies": [
-		{ "name": "fmt", "version>=": "9.1.0", "host": true },		
+		{ "name": "fmt", "version>=": "9.1.0", "host": true },
+		{ "name": "cxxopts", "version>=": "3.1.1", "host": true },
 		{ "name": "tracy", "version>=": "0.9.0", "features" : ["gui-tools"], "host": true }
 	],
-	"builtin-baseline": "95252eadd63118201b0d0df0b4360fa613f0de84"
+	"builtin-baseline": "8568364fbeb414db3fa5b5bfc436e57b4368c55f"
 }

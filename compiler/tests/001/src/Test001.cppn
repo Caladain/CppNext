@@ -1,0 +1,20 @@
+#import format
+class Test
+{
+	pub Test()
+	{
+		fmt::print("Test");
+	}
+	pub void Print()
+	{
+		fmt::print("{}",myTestVariable);
+	}
+	int32 myTestVariable {10};
+}
+
+int32 main(string[] args)
+{
+	Test myTest = new Test();
+	myTest->Print();
+	return 0;
+}
