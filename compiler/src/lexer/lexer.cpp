@@ -72,10 +72,10 @@ namespace cppnext::lexer {
         
     }
 
-    void Lexer::LexLine(int32_t lineNumber, std::vector<token>& tokenStream, [[maybe_unused]] const std::string& lineToLex, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
+    void Lexer::LexLine(int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, [[maybe_unused]] const std::string& lineToLex, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
     {
 
-        token newToken;
+        cppnext::token::Token newToken;
         newToken.lineNumber = lineNumber;
         tokenStream.push_back(newToken);
     }
