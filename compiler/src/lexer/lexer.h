@@ -13,6 +13,7 @@ namespace cppnext::lexer {
     {
         std::filesystem::path originalPath;
         std::vector<std::string> originalLines;
+        int32_t fileIndex;
         std::vector<cppnext::token::Token> tokens;
     };
         
@@ -23,12 +24,14 @@ namespace cppnext::lexer {
         Lexer(const Lexer&) = delete;
         Lexer& operator= (const Lexer&) = delete;
         void Lex(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions);
-        std::vector<lexedFile>* GetLexedFiles();
-        void Print(const cxxopts::ParseResult& commandLineOptions);
+        std::vector<lexedFile>* GetLexedFiles() const;
+        void Print(const cxxopts::ParseResult& commandLineOptions) const;
     private:
         void ProcessFilePaths(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions);
         void LexFile(lexedFile& fileToLex, const cxxopts::ParseResult& commandLineOptions);
-        void LexLine(int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);
+        void LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);
+        cppnext::token::Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value);
+        cppnext::token::Token CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, cppnext::token::tokenType type, std::string value);
         std::unique_ptr<std::vector<lexedFile>> lexedFiles =  nullptr;
     };
 }
