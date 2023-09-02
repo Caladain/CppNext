@@ -5,6 +5,8 @@ file (GLOB_RECURSE SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} CONFIGURE_DEPE
 
 add_executable(cppn_compiler ${SRC_FILES})
 
+target_include_directories(cppn_compiler PUBLIC src)
+
 target_link_libraries(cppn_compiler
 PRIVATE
 fmt::fmt
