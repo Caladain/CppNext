@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "lexer/lexer.h"
 
 #include <fstream>
 
@@ -83,5 +83,10 @@ namespace cppnext::lexer {
     std::vector<lexedFile>* Lexer::GetLexedFiles()
     {
         return lexedFiles.get();
+    }
+
+    void Lexer::Print([[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
+    {
+
     }
 }

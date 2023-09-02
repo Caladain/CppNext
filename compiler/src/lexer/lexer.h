@@ -1,3 +1,4 @@
+#pragma once
 #include <cxxopts.hpp>
 #include "token/token.h"
 #include <filesystem>
@@ -23,6 +24,7 @@ namespace cppnext::lexer {
         Lexer& operator= (const Lexer&) = delete;
         void Lex(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions);
         std::vector<lexedFile>* GetLexedFiles();
+        void Print(const cxxopts::ParseResult& commandLineOptions);
     private:
         void ProcessFilePaths(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions);
         void LexFile(lexedFile& fileToLex, const cxxopts::ParseResult& commandLineOptions);

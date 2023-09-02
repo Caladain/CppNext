@@ -1,3 +1,4 @@
+#pragma once
 #include "lexer/lexer.h"
 
 #include <cxxopts.hpp>

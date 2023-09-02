@@ -80,7 +80,7 @@ namespace cppnext::token {
         Keyword_import = 73,    //#import keyword
         NamespaceSeperator = 74 //::
     };
-    std::unordered_map<std::string,tokenType> tokenRepresentation {
+    static std::unordered_map<std::string,tokenType> tokenRepresentation {
         { "{", OpenBrace},
         { "}", CloseBrace},
         { "[", OpenBracket},
