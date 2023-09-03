@@ -6,6 +6,7 @@
 #include <magic_enum.hpp>
 #include "fmt/core.h"
 
+
 namespace cppnext::lexer {
     Lexer::Lexer()
     {
@@ -15,27 +16,48 @@ namespace cppnext::lexer {
     Lexer::~Lexer()
     {
     }
-    void Lexer::Lex(const std::vector<std::string>& rawCommandLineFilePaths, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
+    void Lexer::Lex(const cxxopts::ParseResult& commandLineOptions)
     {
-        ProcessFilePaths(rawCommandLineFilePaths, commandLineOptions);
+        ProcessFilePaths(commandLineOptions);
         for (auto& file : *lexedFiles)
         {
             LexFile(file, commandLineOptions);
         }
-        Print(commandLineOptions);
+        if (commandLineOptions.count("lexerdebug"))
+        {
+            Print(commandLineOptions);
+        }
     }
 
-    void Lexer::ProcessFilePaths(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions)
+    void Lexer::ProcessFilePaths(const cxxopts::ParseResult& commandLineOptions)
     {
         std::filesystem::path prefix{};
         int32_t fileCount{ 0 };
+        std::vector<std::string> rawFilePaths;
         bool prefixUsed{ false };
-        if (commandLineOptions.count("sourceFolder"))
+        if (commandLineOptions.count("recursive") && commandLineOptions.count("sourceFolder"))
         {
-            prefix = commandLineOptions["sourceFolder"].as<std::string>();
-            prefixUsed = true;
+            for (const auto& entry : std::filesystem::recursive_directory_iterator(commandLineOptions["sourceFolder"].as<std::string>()))
+            {
+                if (entry.is_regular_file() && !entry.is_symlink() && entry.path().extension() == ".cppn")
+                {
+                    rawFilePaths.push_back(entry.path().string());
+                    prefix = "";
+                    prefixUsed = true;
+                }
+            }
         }
-        for (const auto& file : rawCommandLineFilePaths)
+        else
+        {            
+            if (commandLineOptions.count("sourceFolder"))
+            {
+                prefix = commandLineOptions["sourceFolder"].as<std::string>();
+                prefixUsed = true;
+            }
+            rawFilePaths = commandLineOptions["files"].as<std::vector<std::string>>();
+        }
+        
+        for (const auto& file : rawFilePaths)
         {
             auto path = std::filesystem::path(file);
             std::filesystem::path prefixedPath = prefix / path;
@@ -112,6 +134,9 @@ namespace cppnext::lexer {
                     if (cppnext::token::tokenRepresentation.count(maybeWord))
                     {
                         tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, maybeWord));
+                        startOfIncompleteWord = 0;
+                        processingIncompleteWord = false;
+                        incompleteWord.clear();
                         continue;
                     }
                     else
@@ -146,7 +171,11 @@ namespace cppnext::lexer {
                 processingIncompleteWord = true;
                 incompleteWord = characterBeingEvaluated;
             }
-        }        
+        }
+        if (processingIncompleteWord)
+        {
+            tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
+        }
     }
 
     std::vector<lexedFile>* Lexer::GetLexedFiles() const
@@ -177,16 +206,28 @@ namespace cppnext::lexer {
 
     void Lexer::Print([[maybe_unused]] const cxxopts::ParseResult& commandLineOptions) const
     {
+        std::filesystem::path outputPathPrefix = ".";
+        if (commandLineOptions.count("output"))
+        {
+            outputPathPrefix = commandLineOptions["output"].as<std::string>();
+        }
+        outputPathPrefix.append("compilerDiagnostics");
+        outputPathPrefix.append("lexer");
         for (const auto& file : *lexedFiles)
         {
-            fmt::print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
+            std::filesystem::path outputPath = outputPathPrefix;
+            outputPath.append(file.originalPath.filename().string());
+            outputPath.replace_extension("txt");
+            std::filesystem::create_directories(outputPath.parent_path());
+            auto outputFile = fmt::output_file(outputPath.string());
+            outputFile.print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
             for (const auto& token : file.tokens)
             {
-                PrintToken(token, commandLineOptions);
+                PrintToken(token, commandLineOptions, outputFile);
             }
         }
     }
-    void Lexer::PrintToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions) const
+    void Lexer::PrintToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
     {
         const auto& lexedFile = (*lexedFiles)[token.fileIndex];
         auto prettyLineNumber = token.lineNumber + 1; //Line numbers are zero index, but humans like 1 index for error messages.
@@ -197,7 +238,7 @@ namespace cppnext::lexer {
         std::string_view trimmedString = std::string_view(rawLine).substr(firstPosition, lastPosition+1);
         auto caretPosition = token.linePosition - firstPosition;
         auto space = std::string(caretPosition, ' ');
-        fmt::print("{}  :({})({})\n", trimmedString, prettyLineNumber, token.linePosition);
-        fmt::print("{}^ {} {}\n", space, magic_enum::enum_name(token.type), token.value);
+        outputFile.print("{}  :({})({})\n", trimmedString, prettyLineNumber, token.linePosition);
+        outputFile.print("{}^ {} {}\n", space, magic_enum::enum_name(token.type), token.value);
     }
 }

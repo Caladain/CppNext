@@ -15,7 +15,7 @@ namespace cppnext::compiler {
         ~cppnCompiler();
         cppnCompiler(const cppnCompiler&) = delete;
         cppnCompiler& operator= (const cppnCompiler&) = delete;
-        void ProcessFiles(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions);
+        void ProcessFiles(const cxxopts::ParseResult& commandLineOptions);
     private:
         std::unique_ptr<cppnext::lexer::Lexer> lexer;
     };

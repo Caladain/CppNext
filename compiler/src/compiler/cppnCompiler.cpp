@@ -11,8 +11,8 @@ namespace cppnext::compiler {
     {
     }
 
-    void cppnCompiler::ProcessFiles(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions)
+    void cppnCompiler::ProcessFiles(const cxxopts::ParseResult& commandLineOptions)
     {
-        lexer->Lex(rawCommandLineFilePaths, commandLineOptions);
+        lexer->Lex(commandLineOptions);
     }
 }
