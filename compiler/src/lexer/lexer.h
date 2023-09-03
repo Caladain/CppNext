@@ -30,6 +30,7 @@ namespace cppnext::lexer {
         void ProcessFilePaths(const std::vector<std::string>& rawCommandLineFilePaths, const cxxopts::ParseResult& commandLineOptions);
         void LexFile(lexedFile& fileToLex, const cxxopts::ParseResult& commandLineOptions);
         void LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);
+        void PrintToken(const cppnext::token::Token& token, const cxxopts::ParseResult& commandLineOptions) const;
         cppnext::token::Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value);
         cppnext::token::Token CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, cppnext::token::tokenType type, std::string value);
         std::unique_ptr<std::vector<lexedFile>> lexedFiles =  nullptr;

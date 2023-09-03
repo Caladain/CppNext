@@ -13,6 +13,7 @@ fmt::fmt
 Tracy::TracyClient
 Threads::Threads #needed by tracy
 cxxopts::cxxopts
+magic_enum::magic_enum
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SRC_FILES})

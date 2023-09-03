@@ -5,7 +5,8 @@
 	"dependencies": [
 		{ "name": "fmt", "version>=": "9.1.0", "host": true },
 		{ "name": "cxxopts", "version>=": "3.1.1", "host": true },
-		{ "name": "tracy", "version>=": "0.9.0", "features" : ["gui-tools"], "host": true }
+		{ "name": "tracy", "version>=": "0.9.0", "features" : ["gui-tools"], "host": true },
+		{ "name": "magic-enum", "version>=": "0.8.2", "host": true }
 	],
 	"builtin-baseline": "8568364fbeb414db3fa5b5bfc436e57b4368c55f"
 }

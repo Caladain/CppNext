@@ -79,6 +79,7 @@ namespace cppnext::token {
         Keyword_import,    //#import keyword
         NamespaceSeperator //::
     };
+
     static std::unordered_map<std::string,tokenType> tokenRepresentation {
         { "{", OpenBrace},
         { "}", CloseBrace},
@@ -152,6 +153,7 @@ namespace cppnext::token {
         { "operator", Keyword_operator},
         { "private", Keyword_private},
         { "public", Keyword_public},
+        { "pub", Keyword_public },
         { "trait", Keyword_trait},
         { "return", Keyword_return},
         { "struct", Keyword_struct},
