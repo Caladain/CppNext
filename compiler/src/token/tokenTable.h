@@ -5,15 +5,15 @@ namespace cppnext::token {
     enum tokenType
     {
         Unknown = 0,
-        OpenBrace,          //{
-        CloseBrace,         //}
-        OpenBracket,        //[
-        CloseBracket,       //]
-        OpenParen,          //(
-        CloseParen,         //)
-        Backtick,           //`
-        Tilde,              //~
-        Bang,               //!
+        OpenBrace,         //{
+        CloseBrace,        //}
+        OpenBracket,       //[
+        CloseBracket,      //]
+        OpenParen,         //(
+        CloseParen,        //)
+        Backtick,          //`
+        Tilde,             //~
+        Bang,              //!
         At,                //@
         DollarSign,        //$
         Percent,           //%

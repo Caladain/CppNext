@@ -101,81 +101,96 @@ namespace cppnext::lexer {
     }
 
     void Lexer::LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, [[maybe_unused]] const std::string& lineToLex, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
-    {
-        int startOfIncompleteWord=0;
-        bool processingIncompleteWord = false;
-        std::string incompleteWord{};
+    {        
         for (int i = 0; i < lineToLex.size(); i++)
         {
-            const std::string characterBeingEvaluated { lineToLex[i] };
-            const auto representationCount = cppnext::token::tokenRepresentation.count(characterBeingEvaluated);
-            //If the next character is a space, we have a token.
-            if (std::isspace(lineToLex[i]))
+             char characterBeingEvaluated { lineToLex[i] };
+                       
+            if (isspace(lineToLex[i]))
             {
-                //Or we might be a block of spaces
-                if (!processingIncompleteWord)
-                {
-                    continue;
-                }
-                else
-                {
-                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
-                    startOfIncompleteWord = 0;
-                    processingIncompleteWord = false;
-                    incompleteWord.clear();
-                    continue;
-                }
+                continue;
             }
-            if (representationCount > 0)
+            if (IsIdentifierCharacter(lineToLex[i]))
             {
-                if (processingIncompleteWord)
+                int startOfIdentifierString = i;
+                std::string IdentifierString = ConsumeIdentifier(characterBeingEvaluated, lineToLex, i);
+                tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, IdentifierString));
+                characterBeingEvaluated = lineToLex[i];
+                /*startOfIncompleteWord = i;
+                incompleteWord = characterBeingEvaluated;
+                i++;
+                for (; i < lineToLex.size(); i++)
                 {
-                    std::string maybeWord = incompleteWord + characterBeingEvaluated;
-                    if (cppnext::token::tokenRepresentation.count(maybeWord))
+                    if (IsIdentifierCharacter(lineToLex[i]))
                     {
-                        tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, maybeWord));
-                        startOfIncompleteWord = 0;
-                        processingIncompleteWord = false;
-                        incompleteWord.clear();
-                        continue;
+                        incompleteWord += lineToLex[i];
                     }
                     else
                     {
                         tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
-                        startOfIncompleteWord = 0;
-                        processingIncompleteWord = false;
-                        incompleteWord.clear();
+                        CreateTokenIfReservedSymbol(lineToLex[i], lineToLex, fileIndex, lineNumber, i, tokenStream);
+                        break;                        
                     }
-                }
-                if (characterBeingEvaluated == ":")
-                {
-                    startOfIncompleteWord = i;
-                    processingIncompleteWord = true;
-                    incompleteWord = characterBeingEvaluated;
-                    continue;
-                }
-                else
-                {
-                    tokenStream.push_back(LexToken(fileIndex, lineNumber, i, characterBeingEvaluated));
-                    continue;
-                }
+                }                
+                continue;*/
             }
-            if (processingIncompleteWord)
+            if (CreateTokenIfReservedSymbol(characterBeingEvaluated, lineToLex, fileIndex, lineNumber, i, tokenStream))
             {
-                incompleteWord += characterBeingEvaluated;
-                continue;
+
+            }
+        }
+        /*if (processingIncompleteWord)
+        {
+            tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
+        }*/
+    }
+
+    std::string Lexer::ConsumeIdentifier(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
+    {        
+        std::string incompleteWord = { characterBeingEvaluated };
+        positionInLine++;
+        for (; positionInLine < lineToLex.size(); positionInLine++)
+        {
+            if (IsIdentifierCharacter(lineToLex[positionInLine]))
+            {
+                incompleteWord += lineToLex[positionInLine];
             }
             else
             {
-                startOfIncompleteWord = i;
-                processingIncompleteWord = true;
-                incompleteWord = characterBeingEvaluated;
+                //positionInLine--;
+                break;
             }
         }
-        if (processingIncompleteWord)
+        return incompleteWord;
+    }
+
+    bool Lexer::CreateTokenIfReservedSymbol(const char characterBeingEvaluated, const std::string& lineToLex, int32_t fileIndex, int32_t lineNumber, int32_t& positionInLine, std::vector<cppnext::token::Token>& tokenStream)
+    {
+        char nextCharacterBeingEvaluated{};
+        if (positionInLine + 1 <= lineToLex.size())
         {
-            tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
+            {
+                nextCharacterBeingEvaluated = lineToLex[positionInLine + 1];
+            }
         }
+        const auto representationCount = cppnext::token::tokenRepresentation.count(std::string{characterBeingEvaluated});
+        if (representationCount)
+        {
+            if (characterBeingEvaluated == ':' && nextCharacterBeingEvaluated == ':')
+            {
+                tokenStream.push_back(LexToken(fileIndex, lineNumber, positionInLine, std::string{characterBeingEvaluated} + std::string{nextCharacterBeingEvaluated}));
+                positionInLine++;
+                return true;
+            }
+            tokenStream.push_back(LexToken(fileIndex, lineNumber, positionInLine, std::string{characterBeingEvaluated}));
+            return true;
+        }
+        return false;
+    }
+
+    bool Lexer::IsIdentifierCharacter(const char character) const
+    {
+        return isalnum(character) || character == '_';
     }
 
     std::vector<lexedFile>* Lexer::GetLexedFiles() const
@@ -184,12 +199,29 @@ namespace cppnext::lexer {
     }
 
     cppnext::token::Token Lexer::LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value)
-    {
+    { 
         if (cppnext::token::tokenRepresentation.count(value))
         {
             return CreateToken(fileIndex, lineNumber, linePosition, cppnext::token::tokenRepresentation[value], value);
         }
+        
         return CreateToken(fileIndex, lineNumber, linePosition, cppnext::token::Unknown, value);
+    }
+
+    std::tuple<std::string, std::string> Lexer::PrepareErrorMessageLine(const int32_t& fileIndex, const int32_t& lineNumber, const int32_t& linePosition) const
+    {
+        const auto& lexedFile = (*lexedFiles)[fileIndex];
+        auto prettyLineNumber = lineNumber + 1; //Line numbers are zero index, but humans like 1 index for error messages.
+
+        std::string rawLine = lexedFile.originalLines[lineNumber];
+        auto firstPosition = rawLine.find_first_not_of(" \t");
+        auto lastPosition = rawLine.find_last_not_of(" \t");
+        std::string_view trimmedString = std::string_view(rawLine).substr(firstPosition, lastPosition + 1);
+        auto caretPosition = linePosition - firstPosition;
+        auto space = std::string(caretPosition, ' ');
+        std::string fullErrorLine = fmt::format("{}  :({})({})\n", trimmedString, prettyLineNumber, linePosition);
+        std::string caretLine = fmt::format("{}^", space);
+        return { fullErrorLine, caretLine };
     }
 
 
@@ -229,16 +261,8 @@ namespace cppnext::lexer {
     }
     void Lexer::PrintToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
     {
-        const auto& lexedFile = (*lexedFiles)[token.fileIndex];
-        auto prettyLineNumber = token.lineNumber + 1; //Line numbers are zero index, but humans like 1 index for error messages.
-
-        std::string rawLine = lexedFile.originalLines[token.lineNumber];
-        auto firstPosition = rawLine.find_first_not_of(" \t");
-        auto lastPosition = rawLine.find_last_not_of(" \t");
-        std::string_view trimmedString = std::string_view(rawLine).substr(firstPosition, lastPosition+1);
-        auto caretPosition = token.linePosition - firstPosition;
-        auto space = std::string(caretPosition, ' ');
-        outputFile.print("{}  :({})({})\n", trimmedString, prettyLineNumber, token.linePosition);
-        outputFile.print("{}^ {} {}\n", space, magic_enum::enum_name(token.type), token.value);
+        const auto [ErrorLine, spacedCaret] = PrepareErrorMessageLine(token.fileIndex, token.lineNumber, token.linePosition);
+        outputFile.print("{}", ErrorLine);
+        outputFile.print("{} {} {}\n", spacedCaret, magic_enum::enum_name(token.type), token.value);
     }
 }
