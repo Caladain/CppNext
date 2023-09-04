@@ -15,6 +15,7 @@ namespace cppnext::token {
         Tilde,             //~
         Bang,              //!
         At,                //@
+        Hash,              //#
         DollarSign,        //$
         Percent,           //%
         Caret,             //^
@@ -36,6 +37,7 @@ namespace cppnext::token {
         CloseAngleBracket, //>
         ForwardSlash,      ///
         QuestionMark,      //?
+        ArrowOperator,     //->
         AlphaNumeric,      //Starts with _AZaz, may contain AlphaNumeric and _, must not contain other special characters, will not be a reserved keyword.
         NumericAlpha,      //Starts with a number, may end with AlphaNumeric to indicate the type.
         Keyword_bool,      //bool type
@@ -77,6 +79,7 @@ namespace cppnext::token {
         Keyword_override,  //override keyword
         Keyword_final,     //final keyword
         Keyword_import,    //#import keyword
+        Keyword_class,     //class
         NamespaceSeperator //::
     };
 
@@ -91,6 +94,7 @@ namespace cppnext::token {
         { "~", Tilde},
         { "!", Bang},
         { "@", At},
+        { "#", Hash},
         { "$", DollarSign},
         { "%", Percent},
         { "^", Caret},
@@ -111,7 +115,8 @@ namespace cppnext::token {
         { ".", Period},
         { ">", CloseAngleBracket},
         { "/", ForwardSlash},
-        { "?", QuestionMark},        
+        { "?", QuestionMark},
+        { "->", ArrowOperator},
         { "bool", Keyword_bool},
         { "catch", Keyword_catch},
         { "char8", Keyword_char8},
@@ -166,6 +171,7 @@ namespace cppnext::token {
         { "override", Keyword_override},
         { "final", Keyword_final},
         { "#import", Keyword_import},
+        { "class", Keyword_class },
         { "::", NamespaceSeperator },
     };
 }
