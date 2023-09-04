@@ -110,7 +110,7 @@ namespace cppnext::lexer {
             {
                 continue;
             }
-            if (IsIdentifierCharacter(lineToLex[i]))
+            if (IsValidStartIdentifierCharacter(lineToLex[i]))
             {
                 int startOfIdentifierString = i;
                 std::string IdentifierString = ConsumeIdentifier(characterBeingEvaluated, lineToLex, i);
@@ -141,6 +141,20 @@ namespace cppnext::lexer {
                 }                
                 continue;*/
             }
+            if (IsValidStartNumericalCharacter(lineToLex[i]))
+            {
+                int startOfIdentifierString = i;
+                std::string IdentifierString = ConsumeNumerical(characterBeingEvaluated, lineToLex, i);
+                if (cppnext::token::tokenRepresentation.count(IdentifierString))
+                {
+                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, IdentifierString));
+                }
+                else
+                {
+                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, cppnext::token::tokenType::NumericAlpha, IdentifierString));
+                }
+                characterBeingEvaluated = lineToLex[i];
+            }
             if (CreateTokenIfReservedSymbol(characterBeingEvaluated, lineToLex, fileIndex, lineNumber, i, tokenStream))
             {
                 
@@ -160,6 +174,49 @@ namespace cppnext::lexer {
         {
             if (IsIdentifierCharacter(lineToLex[positionInLine]))
             {
+                incompleteWord += lineToLex[positionInLine];
+            }
+            else
+            {
+                //positionInLine--;
+                break;
+            }
+        }
+        return incompleteWord;
+    }
+
+    std::string Lexer::ConsumeNumerical(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
+    {
+        std::string incompleteWord = { characterBeingEvaluated };
+        positionInLine++;
+        bool firstPeriodSeperatorFound = false;
+        bool firstAlphaFound = false;
+        for (; positionInLine < lineToLex.size(); positionInLine++)
+        {
+            if (IsNumericalCharacter(lineToLex[positionInLine]))
+            {
+                if (lineToLex[positionInLine] == '.')
+                {
+                    if (firstPeriodSeperatorFound)
+                    {
+                        //throw
+                    }
+                    else
+                    {
+                        firstPeriodSeperatorFound = true;
+                    }
+                }
+                if (isalpha(lineToLex[positionInLine]))
+                {
+                    if (firstAlphaFound)
+                    {
+                        //throw
+                    }
+                    else
+                    {
+                        firstAlphaFound = true;
+                    }
+                }
                 incompleteWord += lineToLex[positionInLine];
             }
             else
@@ -208,10 +265,24 @@ namespace cppnext::lexer {
         }
         return false;
     }
+    bool Lexer::IsValidStartIdentifierCharacter(const char character) const
+    {
+        return isalpha(character) || character == '_';
+    }
+
+    bool Lexer::IsValidStartNumericalCharacter(const char character) const
+    {
+        return isdigit(character);
+    }
 
     bool Lexer::IsIdentifierCharacter(const char character) const
     {
         return isalnum(character) || character == '_';
+    }
+
+    bool Lexer::IsNumericalCharacter(const char character) const
+    {
+        return isalnum(character) || character == '.';
     }
 
     std::vector<lexedFile>* Lexer::GetLexedFiles() const
