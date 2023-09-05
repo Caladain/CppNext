@@ -23,7 +23,7 @@ namespace cppnext::lexer {
         {
             LexFile(file, commandLineOptions);
         }
-        if (commandLineOptions.count("lexerdebug"))
+        if (commandLineOptions.count("lexerdebug") || commandLineOptions.count("lexerdebugtokens"))
         {
             Print(commandLineOptions);
         }
@@ -78,7 +78,7 @@ namespace cppnext::lexer {
                 fmt::print("Error 0001: File {} Does not exist.\n", prefixedPath.string());
                 throw 0001;
             }
-        }
+        }        
     }
 
     void Lexer::LexFile(lexedFile& fileToLex, const cxxopts::ParseResult& commandLineOptions)
@@ -123,23 +123,6 @@ namespace cppnext::lexer {
                     tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, cppnext::token::tokenType::AlphaNumeric, IdentifierString));
                 }
                 characterBeingEvaluated = lineToLex[i];
-                /*startOfIncompleteWord = i;
-                incompleteWord = characterBeingEvaluated;
-                i++;
-                for (; i < lineToLex.size(); i++)
-                {
-                    if (IsIdentifierCharacter(lineToLex[i]))
-                    {
-                        incompleteWord += lineToLex[i];
-                    }
-                    else
-                    {
-                        tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
-                        CreateTokenIfReservedSymbol(lineToLex[i], lineToLex, fileIndex, lineNumber, i, tokenStream);
-                        break;                        
-                    }
-                }                
-                continue;*/
             }
             if (IsValidStartNumericalCharacter(lineToLex[i]))
             {
@@ -160,10 +143,6 @@ namespace cppnext::lexer {
                 
             }
         }
-        /*if (processingIncompleteWord)
-        {
-            tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIncompleteWord, incompleteWord));
-        }*/
     }
 
     std::string Lexer::ConsumeIdentifier(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
@@ -178,9 +157,28 @@ namespace cppnext::lexer {
             }
             else
             {
-                //positionInLine--;
                 break;
             }
+        }
+        return incompleteWord;
+    }
+
+    std::string Lexer::ConsumeStringLiteral(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
+    {
+        std::string incompleteWord = { characterBeingEvaluated };
+        positionInLine++;
+        bool foundEndQuote = false;
+        for (; positionInLine < lineToLex.size(); positionInLine++)
+        {
+            incompleteWord += lineToLex[positionInLine];
+            if (lineToLex[positionInLine] == '"')
+            {
+                break;
+            }
+        }
+        if (!foundEndQuote)
+        {
+            //throw
         }
         return incompleteWord;
     }
@@ -250,6 +248,13 @@ namespace cppnext::lexer {
             {
                 tokenStream.push_back(LexToken(fileIndex, lineNumber, positionInLine, std::string{characterBeingEvaluated} + std::string{nextCharacterBeingEvaluated}));
                 positionInLine++;
+                return true;
+            }
+            if (characterBeingEvaluated == '"')
+            {
+                int startOfStringLiteral = positionInLine;
+                std::string word = ConsumeStringLiteral(characterBeingEvaluated, lineToLex, positionInLine);
+                tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfStringLiteral, cppnext::token::tokenType::StringLiteral, word));
                 return true;
             }
             if (characterBeingEvaluated == '#')
@@ -333,7 +338,7 @@ namespace cppnext::lexer {
         return newToken;
     }
 
-    void Lexer::Print([[maybe_unused]] const cxxopts::ParseResult& commandLineOptions) const
+    void Lexer::Print(const cxxopts::ParseResult& commandLineOptions) const
     {
         std::filesystem::path outputPathPrefix = ".";
         if (commandLineOptions.count("output"))
@@ -344,22 +349,41 @@ namespace cppnext::lexer {
         outputPathPrefix.append("lexer");
         for (const auto& file : *lexedFiles)
         {
-            std::filesystem::path outputPath = outputPathPrefix;
-            outputPath.append(file.originalPath.filename().string());
-            outputPath.replace_extension("txt");
-            std::filesystem::create_directories(outputPath.parent_path());
-            auto outputFile = fmt::output_file(outputPath.string());
-            outputFile.print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
-            for (const auto& token : file.tokens)
+            if (commandLineOptions.count("lexerdebug"))
             {
-                PrintToken(token, commandLineOptions, outputFile);
+                std::filesystem::path outputPath = outputPathPrefix;
+                outputPath.append(file.originalPath.filename().string());
+                outputPath.replace_extension("debug");
+                std::filesystem::create_directories(outputPath.parent_path());
+                auto outputFile = fmt::output_file(outputPath.string());
+                outputFile.print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
+                for (const auto& token : file.tokens)
+                {
+                    PrintDebugToken(token, commandLineOptions, outputFile);
+                }
+            }
+            if (commandLineOptions.count("lexerdebugtokens"))
+            {
+                std::filesystem::path outputPath = outputPathPrefix;
+                outputPath.append(file.originalPath.filename().string());
+                outputPath.replace_extension("tokens");
+                std::filesystem::create_directories(outputPath.parent_path());
+                auto tokenFile = fmt::output_file(outputPath.string());
+                for (const auto& token : file.tokens)
+                {
+                    PrintToken(token, commandLineOptions, tokenFile);
+                }
             }
         }
     }
-    void Lexer::PrintToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
+    void Lexer::PrintDebugToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
     {
         const auto [ErrorLine, spacedCaret] = PrepareErrorMessageLine(token.fileIndex, token.lineNumber, token.linePosition);
         outputFile.print("{}", ErrorLine);
         outputFile.print("{} {} {}\n", spacedCaret, magic_enum::enum_name(token.type), token.value);
+    }
+    void Lexer::PrintToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
+    {
+        outputFile.print("[{}:{}]\n", magic_enum::enum_name(token.type), token.value);
     }
 }

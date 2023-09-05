@@ -17,6 +17,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
         ("o,output", "CppNext Output Folder", cxxopts::value<std::string>())
         ("v,verbose", "Verbose Output", cxxopts::value<bool>()->default_value("false"))
         ("lexerdebug", "Output Lexer Debugging information")
+        ("lexerdebugtokens", "Output Lexer Tokens for Debugging")
         ;
     options.parse_positional({ "files" });
     auto result = options.parse(argc, argv);

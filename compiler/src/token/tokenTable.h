@@ -80,7 +80,8 @@ namespace cppnext::token {
         Keyword_final,     //final keyword
         Keyword_import,    //#import keyword
         Keyword_class,     //class
-        NamespaceSeperator //::
+        NamespaceSeperator,//::
+        StringLiteral
     };
 
     static std::unordered_map<std::string,tokenType> tokenRepresentation {
