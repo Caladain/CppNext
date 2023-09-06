@@ -18,6 +18,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
         ("v,verbose", "Verbose Output", cxxopts::value<bool>()->default_value("false"))
         ("lexerdebug", "Output Lexer Debugging information")
         ("lexerdebugtokens", "Output Lexer Tokens for Debugging")
+        ("parserdebug", "Output Parser Debugging information")
         ;
     options.parse_positional({ "files" });
     auto result = options.parse(argc, argv);
@@ -28,7 +29,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     }
     
     //Pass the options to the compiler and kick things off
-    auto compiler = std::make_unique<cppnext::compiler::cppnCompiler>();
+    auto compiler = std::make_unique<cppnext::cppnCompiler>();
     compiler->ProcessFiles(result);
     return 0;
 }

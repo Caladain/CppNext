@@ -3,7 +3,8 @@
 #include <string>
 #include <stdint.h>
 
-namespace cppnext::token {
+namespace cppnext
+{
     struct Token
     {
         int32_t fileIndex{ 0 };

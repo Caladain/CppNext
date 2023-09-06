@@ -7,7 +7,8 @@
 #include "fmt/core.h"
 
 
-namespace cppnext::lexer {
+namespace cppnext
+{
     Lexer::Lexer()
     {
         lexedFiles = std::make_unique<std::vector<lexedFile>>();
@@ -16,6 +17,7 @@ namespace cppnext::lexer {
     Lexer::~Lexer()
     {
     }
+
     void Lexer::Lex(const cxxopts::ParseResult& commandLineOptions)
     {
         ProcessFilePaths(commandLineOptions);
@@ -100,7 +102,7 @@ namespace cppnext::lexer {
         
     }
 
-    void Lexer::LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, [[maybe_unused]] const std::string& lineToLex, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
+    void Lexer::LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<Token>& tokenStream, const std::string& lineToLex, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
     {        
         for (int i = 0; i < lineToLex.size(); i++)
         {
@@ -114,13 +116,13 @@ namespace cppnext::lexer {
             {
                 int startOfIdentifierString = i;
                 std::string IdentifierString = ConsumeIdentifier(characterBeingEvaluated, lineToLex, i);
-                if (cppnext::token::tokenRepresentation.count(IdentifierString))
+                if (tokenRepresentation.count(IdentifierString))
                 {
                     tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, IdentifierString));
                 }
                 else
                 {
-                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, cppnext::token::tokenType::AlphaNumeric, IdentifierString));
+                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, tokenType::AlphaNumeric, IdentifierString));
                 }
                 characterBeingEvaluated = lineToLex[i];
             }
@@ -128,13 +130,13 @@ namespace cppnext::lexer {
             {
                 int startOfIdentifierString = i;
                 std::string IdentifierString = ConsumeNumerical(characterBeingEvaluated, lineToLex, i);
-                if (cppnext::token::tokenRepresentation.count(IdentifierString))
+                if (tokenRepresentation.count(IdentifierString))
                 {
                     tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, IdentifierString));
                 }
                 else
                 {
-                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, cppnext::token::tokenType::NumericAlpha, IdentifierString));
+                    tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, tokenType::NumericAlpha, IdentifierString));
                 }
                 characterBeingEvaluated = lineToLex[i];
             }
@@ -226,7 +228,7 @@ namespace cppnext::lexer {
         return incompleteWord;
     }
 
-    bool Lexer::CreateTokenIfReservedSymbol(const char characterBeingEvaluated, const std::string& lineToLex, int32_t fileIndex, int32_t lineNumber, int32_t& positionInLine, std::vector<cppnext::token::Token>& tokenStream)
+    bool Lexer::CreateTokenIfReservedSymbol(const char characterBeingEvaluated, const std::string& lineToLex, int32_t fileIndex, int32_t lineNumber, int32_t& positionInLine, std::vector<Token>& tokenStream)
     {
         char nextCharacterBeingEvaluated{};
         if (positionInLine + 1 <= lineToLex.size())
@@ -235,7 +237,7 @@ namespace cppnext::lexer {
                 nextCharacterBeingEvaluated = lineToLex[positionInLine + 1];
             }
         }
-        const auto representationCount = cppnext::token::tokenRepresentation.count(std::string{characterBeingEvaluated});
+        const auto representationCount = tokenRepresentation.count(std::string{characterBeingEvaluated});
         if (representationCount)
         {
             if (characterBeingEvaluated == ':' && nextCharacterBeingEvaluated == ':')
@@ -254,7 +256,7 @@ namespace cppnext::lexer {
             {
                 int startOfStringLiteral = positionInLine;
                 std::string word = ConsumeStringLiteral(characterBeingEvaluated, lineToLex, positionInLine);
-                tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfStringLiteral, cppnext::token::tokenType::StringLiteral, word));
+                tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfStringLiteral, tokenType::StringLiteral, word));
                 return true;
             }
             if (characterBeingEvaluated == '#')
@@ -295,19 +297,19 @@ namespace cppnext::lexer {
         return lexedFiles.get();
     }
 
-    cppnext::token::Token Lexer::LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, cppnext::token::tokenType type, std::string value)
+    Token Lexer::LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, tokenType type, std::string value)
     {
         return CreateToken(fileIndex, lineNumber, linePosition, type, value);
     }
 
-    cppnext::token::Token Lexer::LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value)
+    Token Lexer::LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value)
     { 
-        if (cppnext::token::tokenRepresentation.count(value))
+        if (tokenRepresentation.count(value))
         {
-            return LexToken(fileIndex, lineNumber, linePosition, cppnext::token::tokenRepresentation[value], value);
+            return LexToken(fileIndex, lineNumber, linePosition, tokenRepresentation[value], value);
         }
         
-        return LexToken(fileIndex, lineNumber, linePosition, cppnext::token::Unknown, value);
+        return LexToken(fileIndex, lineNumber, linePosition, tokenType::Unknown, value);
     }
 
     std::tuple<std::string, std::string> Lexer::PrepareErrorMessageLine(const int32_t& fileIndex, const int32_t& lineNumber, const int32_t& linePosition) const
@@ -327,9 +329,9 @@ namespace cppnext::lexer {
     }
 
 
-    cppnext::token::Token Lexer::CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, cppnext::token::tokenType type, std::string value)
+    Token Lexer::CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, tokenType type, std::string value)
     {
-        cppnext::token::Token newToken;
+        Token newToken;
         newToken.fileIndex = fileIndex;
         newToken.lineNumber = lineNumber;
         newToken.linePosition = linePosition;
@@ -376,13 +378,13 @@ namespace cppnext::lexer {
             }
         }
     }
-    void Lexer::PrintDebugToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
+    void Lexer::PrintDebugToken(const Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
     {
         const auto [ErrorLine, spacedCaret] = PrepareErrorMessageLine(token.fileIndex, token.lineNumber, token.linePosition);
         outputFile.print("{}", ErrorLine);
         outputFile.print("{} {} {}\n", spacedCaret, magic_enum::enum_name(token.type), token.value);
     }
-    void Lexer::PrintToken(const cppnext::token::Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
+    void Lexer::PrintToken(const Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
     {
         outputFile.print("[{}:{}]\n", magic_enum::enum_name(token.type), token.value);
     }

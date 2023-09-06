@@ -1,0 +1,5 @@
+@extern
+{
+	 @include "fmt/core.h"
+	 @function fmt::print
+}

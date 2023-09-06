@@ -1,7 +1,8 @@
 #pragma once
 #include <unordered_map>
 #include <string>
-namespace cppnext::token {
+namespace cppnext
+{
     enum tokenType
     {
         Unknown = 0,
@@ -55,6 +56,7 @@ namespace cppnext::token {
         Keyword_uint16,    //uint16 keyword, u16 also accepted
         Keyword_uint32,    //uint32 keyword, u32 also accepted
         Keyword_uint64,    //uint64 keyword, u64 also accepted
+        Keyword_string,    //string keyword
         Keyword_break,     //break keyword
         Keyword_case,      //case keyword
         Keyword_continue,  //continue keyword

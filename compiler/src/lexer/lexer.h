@@ -9,7 +9,7 @@
 
 #include "fmt/os.h"
 
-namespace cppnext::lexer {
+namespace cppnext {
 
     
     struct lexedFile
@@ -17,7 +17,7 @@ namespace cppnext::lexer {
         std::filesystem::path originalPath;
         std::vector<std::string> originalLines;
         int32_t fileIndex{ 0 };
-        std::vector<cppnext::token::Token> tokens;
+        std::vector<Token> tokens;
     };
         
     class Lexer {
@@ -32,9 +32,9 @@ namespace cppnext::lexer {
     private:
         void ProcessFilePaths(const cxxopts::ParseResult& commandLineOptions);
         void LexFile(lexedFile& fileToLex, const cxxopts::ParseResult& commandLineOptions);
-        void LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<cppnext::token::Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);
-        void PrintDebugToken(const cppnext::token::Token& token, const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const;
-        void PrintToken(const cppnext::token::Token& token, const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const;
+        void LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);
+        void PrintDebugToken(const Token& token, const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const;
+        void PrintToken(const Token& token, const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const;
         bool IsIdentifierCharacter(const char character) const;
         bool IsNumericalCharacter(const char character) const;
         bool IsValidStartIdentifierCharacter(const char character) const;
@@ -42,11 +42,11 @@ namespace cppnext::lexer {
         std::string ConsumeNumerical(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeIdentifier(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeStringLiteral(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
-        bool CreateTokenIfReservedSymbol(const char characterBeingEvaluated, const std::string& lineToLex, int32_t fileIndex, int32_t lineNumber, int32_t& positionInLine, std::vector<cppnext::token::Token>& tokenStream);
+        bool CreateTokenIfReservedSymbol(const char characterBeingEvaluated, const std::string& lineToLex, int32_t fileIndex, int32_t lineNumber, int32_t& positionInLine, std::vector<Token>& tokenStream);
         std::tuple<std::string, std::string> PrepareErrorMessageLine(const int32_t& fileIndex, const int32_t& lineNumber, const int32_t& linePosition) const;
-        cppnext::token::Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value);
-        cppnext::token::Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, cppnext::token::tokenType type, std::string value);
-        cppnext::token::Token CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, cppnext::token::tokenType type, std::string value);
+        Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value);
+        Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, tokenType type, std::string value);
+        Token CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, tokenType type, std::string value);
         std::unique_ptr<std::vector<lexedFile>> lexedFiles =  nullptr;
     };
 }
