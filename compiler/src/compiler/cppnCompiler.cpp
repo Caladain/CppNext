@@ -16,6 +16,6 @@ namespace cppnext
     void cppnCompiler::ProcessFiles(const cxxopts::ParseResult& commandLineOptions)
     {
         lexer->Lex(commandLineOptions);
-        parser->Parse();
+        parser->Parse(commandLineOptions);
     }
 }

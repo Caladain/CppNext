@@ -1,20 +1,22 @@
 #import format
-class Test
+namespace ParserTest
 {
-	pub Test()
+	class Test
 	{
-		fmt::print("Test");
+		pub Test()
+		{
+			fmt::print("Test");
+		}
+		pub void Print()
+		{
+			fmt::print("{}",myTestVariable);
+		}
+		int32 myTestVariable {10};
 	}
-	pub void Print()
-	{
-		fmt::print("{}",myTestVariable);
-	}
-	int32 myTestVariable {10};
 }
-
 int32 main(string[] args)
 {
-	Test myTest = new Test();
+	auto* myTest = new ParserTest::Test();
 	myTest->Print();
 	return 0;
 }

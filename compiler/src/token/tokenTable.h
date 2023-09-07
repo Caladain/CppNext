@@ -82,6 +82,7 @@ namespace cppnext
         Keyword_final,     //final keyword
         Keyword_import,    //#import keyword
         Keyword_class,     //class
+        Keyword_auto,      //auto
         NamespaceSeperator,//::
         StringLiteral
     };
@@ -175,6 +176,7 @@ namespace cppnext
         { "final", Keyword_final},
         { "#import", Keyword_import},
         { "class", Keyword_class },
+        { "auto", Keyword_auto },
         { "::", NamespaceSeperator },
     };
 }

@@ -15,8 +15,10 @@ namespace cppnext
     class Parser {
     public:
         Parser(Lexer* lexer);
-        void Parse();
+        void Parse(const cxxopts::ParseResult& commandLineOptions);
     private:
         Lexer* lexer{ nullptr };
+        void ParseFile(const auto& lexedFile, const cxxopts::ParseResult& commandLineOptions);
+        void DebugParseOfFile(const auto& lexedFile, const cxxopts::ParseResult& commandLineOptions);
     };
 }
