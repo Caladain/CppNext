@@ -97,6 +97,9 @@ namespace cppnext
                 LexLine(fileToLex.fileIndex, lineNumber, fileToLex.tokens, line, commandLineOptions);
                 lineNumber++;
             }
+            ErrorAndPrintIfOpenCloseMismatch(parenContainer, '(', ')');
+            ErrorAndPrintIfOpenCloseMismatch(bracketContainer, '[', ']');
+            ErrorAndPrintIfOpenCloseMismatch(braceContainer, '{', '}');
             file.close();
         }
         
@@ -104,7 +107,7 @@ namespace cppnext
 
     void Lexer::LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<Token>& tokenStream, const std::string& lineToLex, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions)
     {        
-        for (int i = 0; i < lineToLex.size(); i++)
+        for (int32_t i = 0; i < lineToLex.size(); i++)
         {
              char characterBeingEvaluated { lineToLex[i] };
                        
@@ -267,11 +270,53 @@ namespace cppnext
                 tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfIdentifierString, word));
                 return true;
             }
-            tokenStream.push_back(LexToken(fileIndex, lineNumber, positionInLine, std::string{characterBeingEvaluated}));
+            auto newToken = LexToken(fileIndex, lineNumber, positionInLine, std::string{ characterBeingEvaluated });
+            HandleOpenCloseCounting(parenContainer, parenCount, '(', ')', characterBeingEvaluated, newToken);
+            HandleOpenCloseCounting(bracketContainer, bracketCount, '[', ']', characterBeingEvaluated, newToken);
+            HandleOpenCloseCounting(braceContainer, braceCount, '{', '}', characterBeingEvaluated, newToken);            
+            tokenStream.push_back(newToken);
             return true;
         }
         return false;
     }
+    void Lexer::HandleOpenCloseCounting(std::vector<Token>& container, int32_t& counter, const char OpeningSymbol, const char ClosingSymbol, const char currentSymbol, Token newToken)
+    {
+        if (currentSymbol == OpeningSymbol || currentSymbol == ClosingSymbol)
+        {
+            container.push_back(newToken);
+            if (currentSymbol == OpeningSymbol)
+            {
+                counter++;
+            }
+            else
+            {
+                counter--;
+                if (counter == 0)
+                {
+                    container.clear();
+                }
+                if (counter < 0)
+                {
+                    fmt::print("Error {}: Lexed {} without an opening {}?\n", 0005, currentSymbol, OpeningSymbol);
+                    fmt::print("{}", FormatDebugToken(newToken, {}));
+                    throw 0005;
+                }
+            }
+        }
+    }
+    void Lexer::ErrorAndPrintIfOpenCloseMismatch(const std::vector<Token>& container, const char OpeningSymbol, const char ClosingSymbol)
+    {
+        if (container.size() != 0)
+        {
+            fmt::print("Error {}: Lexed a mismatch of {} and {}. Printing all seen {} and {} that are potentially mismatched.\n", 0006, OpeningSymbol, ClosingSymbol, OpeningSymbol, ClosingSymbol);
+            for (const auto& token : container)
+            {
+                fmt::print("{}", FormatDebugToken(token, {}));
+            }
+            throw 0006;
+        }
+    }
+
     bool Lexer::IsValidStartIdentifierCharacter(const char character) const
     {
         return isalpha(character) || character == '_';
@@ -323,7 +368,7 @@ namespace cppnext
         std::string_view trimmedString = std::string_view(rawLine).substr(firstPosition, lastPosition + 1);
         auto caretPosition = linePosition - firstPosition;
         auto space = std::string(caretPosition, ' ');
-        std::string fullErrorLine = fmt::format("{}  :({})({})\n", trimmedString, prettyLineNumber, linePosition);
+        std::string fullErrorLine = fmt::format("{}  :Line({})Pos({})\n", trimmedString, prettyLineNumber, linePosition + 1);
         std::string caretLine = fmt::format("{}^", space);
         return { fullErrorLine, caretLine };
     }
@@ -335,8 +380,7 @@ namespace cppnext
         newToken.fileIndex = fileIndex;
         newToken.lineNumber = lineNumber;
         newToken.linePosition = linePosition;
-        newToken.type = type;
-        newToken.value = value;
+        newToken.SetValue(type, value);
         return newToken;
     }
 
@@ -361,7 +405,7 @@ namespace cppnext
                 outputFile.print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
                 for (const auto& token : file.tokens)
                 {
-                    PrintDebugToken(token, commandLineOptions, outputFile);
+                    outputFile.print("{}", FormatDebugToken(token, commandLineOptions));
                 }
             }
             if (commandLineOptions.count("lexerdebugtokens"))
@@ -373,19 +417,19 @@ namespace cppnext
                 auto tokenFile = fmt::output_file(outputPath.string());
                 for (const auto& token : file.tokens)
                 {
-                    PrintToken(token, commandLineOptions, tokenFile);
+                    tokenFile.print("{}", FormatToken(token, commandLineOptions));
                 }
             }
         }
     }
-    void Lexer::PrintDebugToken(const Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
+    std::string Lexer::FormatDebugToken(const Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions) const
     {
         const auto [ErrorLine, spacedCaret] = PrepareErrorMessageLine(token.fileIndex, token.lineNumber, token.linePosition);
-        outputFile.print("{}", ErrorLine);
-        outputFile.print("{} {} {}\n", spacedCaret, magic_enum::enum_name(token.type), token.value);
+        std::string output = fmt::format("{}", ErrorLine);
+        return output + fmt::format("{} {}\n", spacedCaret, token.toString());
     }
-    void Lexer::PrintToken(const Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions, fmt::ostream& outputFile) const
+    std::string Lexer::FormatToken(const Token& token, [[maybe_unused]] const cxxopts::ParseResult& commandLineOptions) const
     {
-        outputFile.print("[{}:{}]\n", magic_enum::enum_name(token.type), token.value);
+        return fmt::format("[{}]\n", token.toString());
     }
 }

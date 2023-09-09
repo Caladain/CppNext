@@ -1,6 +1,7 @@
 #include "parser/parser.h"
 
-#include <magic_enum.hpp>
+#include "parser/importNode.h"
+
 
 namespace cppnext
 {
@@ -22,15 +23,29 @@ namespace cppnext
         }
     }
 
-    void Parser::ParseFile(const auto& lexedFile, const cxxopts::ParseResult& commandLineOptions)
+    void Parser::ParseFile(const lexedFile& LexedFile, const cxxopts::ParseResult& commandLineOptions)
     {
         if (commandLineOptions.count("parserdebug"))
         {
-            DebugParseOfFile(lexedFile, commandLineOptions);
+            DebugParseOfFile(LexedFile, commandLineOptions);
+        }
+        std::size_t lengthOfTokens = LexedFile.tokens.size();
+        //const auto& tokenVector = LexedFile.tokens;
+        for (int32_t i = 0; i < lengthOfTokens; i++)
+        {
+            //auto token = tokenVector[i];
+            //switch (token.type)
+            {
+                
+            }
         }
     }
+    std::unique_ptr<Node> Parser::ParseTokens([[maybe_unused]]const std::vector<Token>& tokens, [[maybe_unused]] int32_t& position)
+    {
+        return nullptr;
+    }
 
-    void Parser::DebugParseOfFile(const auto& lexedFile, const cxxopts::ParseResult& commandLineOptions)
+    void Parser::DebugParseOfFile(const lexedFile& LexedFile, const cxxopts::ParseResult& commandLineOptions)
     {
         std::filesystem::path outputPathPrefix = ".";
         if (commandLineOptions.count("output"))
@@ -42,14 +57,14 @@ namespace cppnext
         if (commandLineOptions.count("parserdebug"))
         {
             std::filesystem::path outputPath = outputPathPrefix;
-            outputPath.append(lexedFile.originalPath.filename().string());
+            outputPath.append(LexedFile.originalPath.filename().string());
             outputPath.replace_extension("debug");
             std::filesystem::create_directories(outputPath.parent_path());
             auto outputFile = fmt::output_file(outputPath.string());
-            outputFile.print("Parse File[{}] {} Begin\n", lexedFile.fileIndex, lexedFile.originalPath.string());
-            for (const auto& token : lexedFile.tokens)
+            outputFile.print("Parse File[{}] {} Begin\n", LexedFile.fileIndex, LexedFile.originalPath.string());
+            for (const auto& token : LexedFile.tokens)
             {
-                outputFile.print("[{}:{}]\n", magic_enum::enum_name(token.type), token.value);
+                outputFile.print("[{}]\n", token.toString());
             }
         }
     }

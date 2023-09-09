@@ -11,7 +11,7 @@ namespace ParserTest
 		{
 			fmt::print("{}",myTestVariable);
 		}
-		int32 myTestVariable {10};
+		float32 myTestVariable {10.0f};
 	}
 }
 int32 main(string[] args)

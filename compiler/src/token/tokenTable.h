@@ -49,10 +49,12 @@ namespace cppnext
         Keyword_float16,   //float16 keyword f16 also accepted
         Keyword_float32,   //float32 keyword f32 also accepted
         Keyword_float64,   //float64 keyword f64 also accepted double also accepted d also accepted
-        Keyword_float128,  //float128 keyword, f128 also accepted double128 also accepted d128 also accepted
+        //Keyword_float128,  //float128 keyword, f128 also accepted double128 also accepted d128 also accepted
+        Keyword_int8,     //int8 keyword, i8 also accepted
         Keyword_int16,     //int16 keyword, i16 also accepted
         Keyword_int32,     //int32 keyword, i32 also accepted
         Keyword_int64,     //int64 keyword, i64 also accepted
+        Keyword_uint8,    //uint8 keyword, u8 also accepted
         Keyword_uint16,    //uint16 keyword, u16 also accepted
         Keyword_uint32,    //uint32 keyword, u32 also accepted
         Keyword_uint64,    //uint64 keyword, u64 also accepted
@@ -135,14 +137,18 @@ namespace cppnext
         { "f32", Keyword_float32 },
         { "float64", Keyword_float64},
         { "f64", Keyword_float64 },
-        { "float128", Keyword_float128},
-        { "f128", Keyword_float128 },
+        //{ "float128", Keyword_float128},
+        //{ "f128", Keyword_float128 },
+        { "int8", Keyword_int8},
+        { "i8", Keyword_int8},
         { "int16", Keyword_int16},
         { "i16", Keyword_int16 },
         { "int32", Keyword_int32},
         { "i32", Keyword_int32 },
         { "int64", Keyword_int64},
         { "i64", Keyword_int64 },
+        { "uint8", Keyword_uint8},
+        { "u8", Keyword_uint8},
         { "uint16", Keyword_uint16},
         { "u16", Keyword_uint16 },
         { "uint32", Keyword_uint32},
