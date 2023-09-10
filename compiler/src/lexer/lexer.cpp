@@ -115,6 +115,11 @@ namespace cppnext
             {
                 continue;
             }
+            if (IsCommentStartCharacter(lineToLex[i]) || inMultiLineComment)
+            {
+                ConsumeComment(characterBeingEvaluated, lineToLex, i);
+                continue;
+            }
             if (IsValidStartIdentifierCharacter(lineToLex[i]))
             {
                 int startOfIdentifierString = i;
@@ -186,6 +191,33 @@ namespace cppnext
             //throw
         }
         return incompleteWord;
+    }
+
+    void Lexer::ConsumeComment(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
+    {
+        char nextCharacterBeingEvaluated{};
+        if (positionInLine + 1 <= lineToLex.size())
+        {
+            {
+                nextCharacterBeingEvaluated = lineToLex[positionInLine + 1];
+            }
+        }
+        if (characterBeingEvaluated == '/' && nextCharacterBeingEvaluated == '*')
+        {
+            inMultiLineComment = true;
+        }
+        if (characterBeingEvaluated == '*' && nextCharacterBeingEvaluated == '/')
+        {
+            inMultiLineComment = false;
+        }
+        if ((characterBeingEvaluated == '/' && nextCharacterBeingEvaluated == '/'))
+        {
+            positionInLine = (int32_t)lineToLex.size();
+        }
+        else
+        {
+            positionInLine++;
+        }
     }
 
     std::string Lexer::ConsumeNumerical(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
@@ -325,6 +357,11 @@ namespace cppnext
     bool Lexer::IsValidStartNumericalCharacter(const char character) const
     {
         return isdigit(character);
+    }
+
+    bool Lexer::IsCommentStartCharacter(const char character) const
+    {
+        return character == '/'; // // or /* 
     }
 
     bool Lexer::IsIdentifierCharacter(const char character) const

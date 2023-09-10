@@ -39,6 +39,8 @@ namespace cppnext {
         bool IsNumericalCharacter(const char character) const;
         bool IsValidStartIdentifierCharacter(const char character) const;
         bool IsValidStartNumericalCharacter(const char character) const;
+        bool IsCommentStartCharacter(const char character) const;
+        void ConsumeComment(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeNumerical(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeIdentifier(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeStringLiteral(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
@@ -56,5 +58,6 @@ namespace cppnext {
         int32_t braceCount{ 0 };
         std::vector<Token> bracketContainer;
         int32_t bracketCount{ 0 };
+        bool inMultiLineComment = false;
     };
 }

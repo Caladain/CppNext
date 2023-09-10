@@ -5,13 +5,15 @@ namespace ParserTest
 	{
 		pub Test()
 		{
-			fmt::print("Test");
+			fmt::print("Test"); //fmt:print("Test");
 		}
 		pub void Print()
 		{
-			fmt::print("{}",myTestVariable);
-		}
-		float32 myTestVariable {10.0f};
+			/* in line test */ fmt::print("{}",myTestVariable);
+		}		
+		/* LineOneTest
+		LineTwoTest
+		LineThree Test */ float32 myTestVariable {10.0f};
 	}
 }
 int32 main(string[] args)
