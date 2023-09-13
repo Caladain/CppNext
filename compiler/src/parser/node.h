@@ -5,11 +5,20 @@
 #include <string>
 #include <stdint.h>
 #include "token/tokenTable.h"
-namespace cppnext
+#include "parser/importNode.h"
+
+namespace cppnext::parser
 {
+    enum parseNodeType
+    {
+        Unknown = 0,
+        Import
+    };
     struct Node {
-        std::vector<std::unique_ptr<Node>> childNodes;
-        tokenType type{ tokenType::Unknown };
+        std::vector<Node> childNodes;
+        parseNodeType type{ parseNodeType::Unknown };
+        std::variant<
+            ImportNodeData> nodeData;
         std::variant<            
             int64_t,            
             uint64_t,

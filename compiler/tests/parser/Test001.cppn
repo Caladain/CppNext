@@ -1,4 +1,4 @@
-#import format
+#import format/test
 namespace ParserTest
 {
 	class Test

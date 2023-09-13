@@ -21,6 +21,7 @@ namespace cppnext
         {
             ParseFile(file, commandLineOptions);
         }
+
     }
 
     void Parser::ParseFile(const lexedFile& LexedFile, const cxxopts::ParseResult& commandLineOptions)
@@ -30,17 +31,30 @@ namespace cppnext
             DebugParseOfFile(LexedFile, commandLineOptions);
         }
         std::size_t lengthOfTokens = LexedFile.tokens.size();
-        //const auto& tokenVector = LexedFile.tokens;
+        const auto& tokenVector = LexedFile.tokens;
         for (int32_t i = 0; i < lengthOfTokens; i++)
         {
-            //auto token = tokenVector[i];
-            //switch (token.type)
+            auto token = tokenVector[i];
+            switch (token.type)
             {
-                
+                case tokenType::Keyword_import:
+                {
+                    auto result = importNodeParser.ConsumeParse(tokenVector, i);
+                    if (result)
+                    {
+                        auto value = result.value();
+                        abstractSyntaxTree.emplace_back(value);
+                    }
+                    else
+                    {
+                        //throw;
+                    }
+                    break;
+                }
             }
         }
     }
-    std::unique_ptr<Node> Parser::ParseTokens([[maybe_unused]]const std::vector<Token>& tokens, [[maybe_unused]] int32_t& position)
+    std::unique_ptr<parser::Node> Parser::ParseTokens([[maybe_unused]]const std::vector<Token>& tokens, [[maybe_unused]] int32_t& position)
     {
         return nullptr;
     }
