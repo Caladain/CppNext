@@ -76,9 +76,9 @@ namespace cppnext
             std::filesystem::create_directories(outputPath.parent_path());
             auto outputFile = fmt::output_file(outputPath.string());
             outputFile.print("Parse File[{}] {} Begin\n", LexedFile.fileIndex, LexedFile.originalPath.string());
-            for (const auto& token : LexedFile.tokens)
+            for (auto& treeNode : abstractSyntaxTree)
             {
-                outputFile.print("[{}]\n", token.toString());
+                outputFile.print("{}\n", treeNode.toString("",commandLineOptions));
             }
         }
     }
