@@ -10,22 +10,27 @@
 
 #include "token/tokenTable.h"
 #include "parser/importNode.h"
+#include "parser/namespaceNode.h"
 
 
 
 namespace cppnext::parser
 {
+    std::optional<parser::Node> GeneralConsumeParse(const std::vector<Token>& tokens, int32_t& position);
+
     template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
     enum parseNodeType
     {
         Unknown = 0,
-        Import
+        Import,
+        Namespace
     };
     struct Node {
         std::vector<Node> childNodes;
         parseNodeType type{ parseNodeType::Unknown };
         std::variant<
-            ImportNodeData> nodeData;
+            ImportNodeData,
+            NamespaceNodeData> nodeData;
         std::variant<            
             int64_t,            
             uint64_t,
@@ -49,7 +54,8 @@ namespace cppnext::parser
                 [&output, &indent, this](std::string&) { output += fmt::format("{} Value: std::string {}\n", indent, std::get<std::string>(value)); }
                 }, value);
             std::visit(overload{
-                [&commandLineOptions, &output, &indent, this](ImportNodeData&) { auto data = std::get<ImportNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); }
+                [&commandLineOptions, &output, &indent, this](ImportNodeData&) { auto data = std::get<ImportNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
+                [&commandLineOptions, &output, &indent, this](NamespaceNodeData&) { auto data = std::get<NamespaceNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); }
                 }, nodeData);
             if (childNodes.size() != 0)
             {

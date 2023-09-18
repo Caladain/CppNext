@@ -8,7 +8,7 @@
 #include <memory>
 #include <tuple>
 #include "parser/node.h"
-#include "parser/importNode.h"
+#include "parser/generalParser.h"
 
 #include "fmt/os.h"
 //-s N:\Projects\CppNext\compiler\tests\parser -r -o  N:\Projects\CppNext\build --parserdebug
@@ -25,9 +25,9 @@ namespace cppnext
          std::unique_ptr<parser::Node> ParseTokens(const std::vector<Token>& tokens, int32_t& position);
     private:
         Lexer* lexer{ nullptr };
-        void ParseFile(const lexedFile& lexedFile, const cxxopts::ParseResult& commandLineOptions);
+        void ParseFile(const lexedFile& lexedFile, const cxxopts::ParseResult& commandLineOptions);        
         void DebugParseOfFile(const lexedFile& lexedFile, const cxxopts::ParseResult& commandLineOptions);
         std::vector<parser::Node> abstractSyntaxTree;
-        ImportNode importNodeParser;
+        GeneralParser generalParser;
     };
 }

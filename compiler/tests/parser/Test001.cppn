@@ -1,5 +1,5 @@
 #import format/test
-namespace ParserTest
+namespace Test::ParserTest
 {
 	class Test
 	{
@@ -18,7 +18,7 @@ namespace ParserTest
 }
 int32 main(string[] args)
 {
-	auto* myTest = new ParserTest::Test();
+	auto* myTest = new Test::ParserTest::Test();
 	myTest->Print();
 	return 0;
 }

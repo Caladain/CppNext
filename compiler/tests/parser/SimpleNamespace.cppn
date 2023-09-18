@@ -1,0 +1,5 @@
+#import format/test
+namespace Test::ParserTest
+{
+	
+}

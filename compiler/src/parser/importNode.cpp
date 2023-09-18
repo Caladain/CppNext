@@ -22,7 +22,7 @@ namespace cppnext
                     {
                         break;
                     }
-                    if (peekToken.type != tokenType::AlphaNumeric || peekToken.type != tokenType::ForwardSlash)
+                    if (peekToken.type != tokenType::AlphaNumeric && peekToken.type != tokenType::ForwardSlash)
                     {
                         //Throw
                     }
