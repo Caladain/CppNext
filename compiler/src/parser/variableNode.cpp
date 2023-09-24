@@ -127,7 +127,35 @@ namespace cppnext
                 }
                 if (currentToken.type == tokenType::NumericAlpha)
                 {
-                    newNode.value = currentToken.value;
+                    try
+                    {
+                        if (NodeData.type == tokenType::Keyword_uint8
+                         || NodeData.type == tokenType::Keyword_uint16
+                         || NodeData.type == tokenType::Keyword_uint32
+                         || NodeData.type == tokenType::Keyword_uint64)
+                        {
+                            newNode.value = std::stoull(currentToken.value);
+                        }
+                        if (NodeData.type == tokenType::Keyword_int8
+                         || NodeData.type == tokenType::Keyword_int16
+                         || NodeData.type == tokenType::Keyword_int32
+                         || NodeData.type == tokenType::Keyword_int64)
+                        {
+                            newNode.value = std::stoll(currentToken.value);
+                        }
+                        if (NodeData.type == tokenType::Keyword_float16
+                         || NodeData.type == tokenType::Keyword_float32
+                         || NodeData.type == tokenType::Keyword_float64)
+                        {
+                            newNode.value = std::stod(currentToken.value);
+                        }
+                    }
+                    catch (...)
+                    {
+                        //throw
+                    }
+                        
+                    //newNode.value = currentToken.value;
                 }
                 
                 NodeData.tokens.push_back(currentToken);
