@@ -43,7 +43,8 @@ namespace cppnext {
         void ConsumeComment(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeNumerical(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
         std::string ConsumeIdentifier(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
-        std::string ConsumeStringLiteral(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine);
+        std::string ConsumeStringLiteral(const std::string& lineToLex, int32_t& positionInLine);
+        std::string ConsumeCharacterLiteral(const std::string& lineToLex, int32_t& positionInLine);
         bool CreateTokenIfReservedSymbol(const char characterBeingEvaluated, const std::string& lineToLex, int32_t fileIndex, int32_t lineNumber, int32_t& positionInLine, std::vector<Token>& tokenStream);
         std::tuple<std::string, std::string> PrepareErrorMessageLine(const int32_t& fileIndex, const int32_t& lineNumber, const int32_t& linePosition) const;
         Token LexToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, std::string value);

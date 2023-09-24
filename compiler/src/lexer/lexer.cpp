@@ -173,18 +173,38 @@ namespace cppnext
         return incompleteWord;
     }
 
-    std::string Lexer::ConsumeStringLiteral(const char characterBeingEvaluated, const std::string& lineToLex, int32_t& positionInLine)
+    std::string Lexer::ConsumeStringLiteral(const std::string& lineToLex, int32_t& positionInLine)
     {
-        std::string incompleteWord = { characterBeingEvaluated };
+        std::string incompleteWord;
         positionInLine++;
         bool foundEndQuote = false;
         for (; positionInLine < lineToLex.size(); positionInLine++)
-        {
-            incompleteWord += lineToLex[positionInLine];
+        {            
             if (lineToLex[positionInLine] == '"')
             {
                 break;
             }
+            incompleteWord += lineToLex[positionInLine];
+        }
+        if (!foundEndQuote)
+        {
+            //throw
+        }
+        return incompleteWord;
+    }
+
+    std::string Lexer::ConsumeCharacterLiteral(const std::string& lineToLex, int32_t& positionInLine)
+    {
+        std::string incompleteWord;
+        positionInLine++;
+        bool foundEndQuote = false;
+        for (; positionInLine < lineToLex.size(); positionInLine++)
+        {            
+            if (lineToLex[positionInLine] == '\'')
+            {
+                break;
+            }
+            incompleteWord += lineToLex[positionInLine];
         }
         if (!foundEndQuote)
         {
@@ -290,8 +310,15 @@ namespace cppnext
             if (characterBeingEvaluated == '"')
             {
                 int startOfStringLiteral = positionInLine;
-                std::string word = ConsumeStringLiteral(characterBeingEvaluated, lineToLex, positionInLine);
+                std::string word = ConsumeStringLiteral(lineToLex, positionInLine);
                 tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfStringLiteral, tokenType::StringLiteral, word));
+                return true;
+            }
+            if (characterBeingEvaluated == '\'')
+            {
+                int startOfStringLiteral = positionInLine;
+                std::string word = ConsumeCharacterLiteral(lineToLex, positionInLine);
+                tokenStream.push_back(LexToken(fileIndex, lineNumber, startOfStringLiteral, tokenType::CharacterLiteral, word));
                 return true;
             }
             if (characterBeingEvaluated == '#')

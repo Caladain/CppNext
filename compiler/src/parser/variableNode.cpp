@@ -14,6 +14,7 @@ namespace cppnext
         bool foundValue = false;
         bool foundCloseBrace = false;
         bool foundCloseSemiColon = false;
+        bool minusFound = false;
         parser::Node newNode;
         newNode.type = cppnext::parser::parseNodeType::Variable;
         VariableNodeData NodeData;
@@ -97,8 +98,21 @@ namespace cppnext
                 startPosition++;
                 continue;
             }
-            if ((currentToken.type == tokenType::AlphaNumeric || currentToken.type == tokenType::NumericAlpha) && foundType && foundIdentifer)
+            if (currentToken.type == tokenType::Minus && foundOpenBrace)
             {
+                NodeData.tokens.push_back(currentToken);
+                minusFound = true;
+                startPosition++;
+                continue;
+            }
+            if ((currentToken.type == tokenType::AlphaNumeric || currentToken.type == tokenType::NumericAlpha || currentToken.type == tokenType::StringLiteral || currentToken.type == tokenType::CharacterLiteral) && foundType && foundIdentifer)
+            {
+                std::string valueToBeConverted;
+                if (minusFound)
+                {
+                    valueToBeConverted += "-";
+                }
+                valueToBeConverted += currentToken.value;
                 if (foundValue)
                 {
                     return {};
@@ -122,8 +136,24 @@ namespace cppnext
                     }
                     else
                     {
-                        newNode.value = currentToken.value;
+                        newNode.value = valueToBeConverted;
                     }                    
+                }
+                if (currentToken.type == tokenType::StringLiteral)
+                {
+                    if (NodeData.type != tokenType::Keyword_string)
+                    {
+                        //throw
+                    }
+                    newNode.value = currentToken.value;
+                }
+                if (currentToken.type == tokenType::CharacterLiteral)
+                {
+                    if (NodeData.type != tokenType::Keyword_char8 && NodeData.type != tokenType::Keyword_char16 && NodeData.type != tokenType::Keyword_char32)
+                    {
+                        //throw
+                    }
+                    newNode.value = currentToken.value;
                 }
                 if (currentToken.type == tokenType::NumericAlpha)
                 {
@@ -134,20 +164,24 @@ namespace cppnext
                          || NodeData.type == tokenType::Keyword_uint32
                          || NodeData.type == tokenType::Keyword_uint64)
                         {
-                            newNode.value = std::stoull(currentToken.value);
+                            if (minusFound)
+                            {
+                                //throw
+                            }
+                            newNode.value = std::stoull(valueToBeConverted);
                         }
                         if (NodeData.type == tokenType::Keyword_int8
                          || NodeData.type == tokenType::Keyword_int16
                          || NodeData.type == tokenType::Keyword_int32
                          || NodeData.type == tokenType::Keyword_int64)
                         {
-                            newNode.value = std::stoll(currentToken.value);
+                            newNode.value = std::stoll(valueToBeConverted);
                         }
                         if (NodeData.type == tokenType::Keyword_float16
                          || NodeData.type == tokenType::Keyword_float32
                          || NodeData.type == tokenType::Keyword_float64)
                         {
-                            newNode.value = std::stod(currentToken.value);
+                            newNode.value = std::stod(valueToBeConverted);
                         }
                     }
                     catch (...)
@@ -182,7 +216,6 @@ namespace cppnext
                 }
                 NodeData.tokens.push_back(currentToken);
                 foundCloseSemiColon = true;
-                startPosition++;
                 break;
             }
             return {};

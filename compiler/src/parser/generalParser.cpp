@@ -40,7 +40,8 @@ namespace cppnext
             case tokenType::AlphaNumeric:
             case tokenType::Keyword_bool:
             case tokenType::Keyword_char8:
-            case tokenType::Keyword_char16:            
+            case tokenType::Keyword_char16: 
+            case tokenType::Keyword_char32:
             case tokenType::Keyword_int8:
             case tokenType::Keyword_int16:
             case tokenType::Keyword_int32:

@@ -86,7 +86,8 @@ namespace cppnext
         Keyword_class,     //class
         Keyword_auto,      //auto
         NamespaceSeperator,//::
-        StringLiteral
+        StringLiteral,
+        CharacterLiteral
     };
 
     static std::unordered_map<std::string,tokenType> tokenRepresentation {
@@ -155,6 +156,7 @@ namespace cppnext
         { "u32", Keyword_uint32 },
         { "uint64", Keyword_uint64},
         { "u64", Keyword_uint64 },
+        { "string", Keyword_string},
         { "break", Keyword_break},
         { "case", Keyword_case},
         { "continue", Keyword_continue},

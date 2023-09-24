@@ -1,5 +1,10 @@
+auto MyAuto{5};
+c32 mychar {'4'};
+u16 myUint{-2};
 i64 testVar2 {5};
 /* LineOneTest
 LineTwoTest
 LineThree Test */ mut f32 myTestVariable {10.0f};
 mut bool myBool{true};
+string myString {"LiteralStringTest"};
+

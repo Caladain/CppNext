@@ -24,6 +24,7 @@ namespace cppnext
                 case tokenType::AlphaNumeric:
                 case tokenType::NumericAlpha:
                 case tokenType::StringLiteral:
+                case tokenType::CharacterLiteral:
                 {
                     value = valueString;
                     break;
@@ -37,6 +38,7 @@ namespace cppnext
                 case tokenType::AlphaNumeric:
                 case tokenType::NumericAlpha:
                 case tokenType::StringLiteral:
+                case tokenType::CharacterLiteral:
                 {
                     return fmt::format("{}:{}", magic_enum::enum_name(type), value);
                     break;
