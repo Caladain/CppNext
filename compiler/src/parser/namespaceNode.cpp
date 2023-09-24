@@ -32,7 +32,7 @@ namespace cppnext
                         }
                         foundNamespaceValidName = true;
                         NodeData.tokens.push_back(peekToken);
-                        namespaceName += std::get<std::string>(peekToken.value);                        
+                        namespaceName += peekToken.value;                        
                     }
                     if (peekToken.type == tokenType::NamespaceSeperator)
                     {

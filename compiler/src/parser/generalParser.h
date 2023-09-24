@@ -5,6 +5,7 @@
 
 #include "parser/importNode.h"
 #include "parser/namespaceNode.h"
+#include "parser/variableNode.h"
 #include "token/token.h"
 
 namespace cppnext
@@ -19,5 +20,6 @@ namespace cppnext
     private:
         ImportNode importNodeParser;
         NamespaceNode namespaceNodeParser;
+        VariableNode variableNodeParser;
     };
 }

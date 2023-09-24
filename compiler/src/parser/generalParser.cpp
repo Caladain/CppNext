@@ -37,6 +37,40 @@ namespace cppnext
                 }
                 break;
             }
+            case tokenType::AlphaNumeric:
+            case tokenType::Keyword_bool:
+            case tokenType::Keyword_char8:
+            case tokenType::Keyword_char16:            
+            case tokenType::Keyword_int8:
+            case tokenType::Keyword_int16:
+            case tokenType::Keyword_int32:
+            case tokenType::Keyword_int64:
+            case tokenType::Keyword_uint8:
+            case tokenType::Keyword_uint16:
+            case tokenType::Keyword_uint32:
+            case tokenType::Keyword_uint64:
+            case tokenType::Keyword_string:
+            case tokenType::Keyword_float16:
+            case tokenType::Keyword_float32:
+            case tokenType::Keyword_float64:
+            case tokenType::Keyword_void:
+            case tokenType::Keyword_auto:
+            case tokenType::Keyword_mutable:
+            {
+                auto variableParseResult = variableNodeParser.ConsumeParse(tokens,position);
+                if (variableParseResult)
+                {
+                    auto value = variableParseResult.value();
+                    return value;
+                }
+                else
+                {
+                    //Check if it's a function instead
+
+                }
+                break;
+            }
+
         }
         return {};
     }

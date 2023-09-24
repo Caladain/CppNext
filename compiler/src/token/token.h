@@ -14,13 +14,7 @@ namespace cppnext
         int32_t lineNumber{ 0 };
         int32_t linePosition{ 0 };
         tokenType type;
-        std::variant<            
-            int64_t,           
-            uint64_t,
-            double_t,
-            bool,            
-            char32_t,
-            std::string> value;
+        std::string value;
 
         void SetValue(const tokenType& newType, const std::string& valueString)
         {
@@ -44,7 +38,7 @@ namespace cppnext
                 case tokenType::NumericAlpha:
                 case tokenType::StringLiteral:
                 {
-                    return fmt::format("{}:{}", magic_enum::enum_name(type), std::get<std::string>(value));
+                    return fmt::format("{}:{}", magic_enum::enum_name(type), value);
                     break;
                 }
             };

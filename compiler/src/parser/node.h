@@ -11,6 +11,7 @@
 #include "token/tokenTable.h"
 #include "parser/importNode.h"
 #include "parser/namespaceNode.h"
+#include "parser/variableNode.h"
 
 
 
@@ -23,14 +24,16 @@ namespace cppnext::parser
     {
         Unknown = 0,
         Import,
-        Namespace
+        Namespace,
+        Variable
     };
     struct Node {
         std::vector<Node> childNodes;
         parseNodeType type{ parseNodeType::Unknown };
         std::variant<
             ImportNodeData,
-            NamespaceNodeData> nodeData;
+            NamespaceNodeData,
+            VariableNodeData> nodeData;
         std::variant<            
             int64_t,            
             uint64_t,
@@ -55,7 +58,8 @@ namespace cppnext::parser
                 }, value);
             std::visit(overload{
                 [&commandLineOptions, &output, &indent, this](ImportNodeData&) { auto data = std::get<ImportNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
-                [&commandLineOptions, &output, &indent, this](NamespaceNodeData&) { auto data = std::get<NamespaceNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); }
+                [&commandLineOptions, &output, &indent, this](NamespaceNodeData&) { auto data = std::get<NamespaceNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
+                [&commandLineOptions, &output, &indent, this](VariableNodeData&) { auto data = std::get<VariableNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); }
                 }, nodeData);
             if (childNodes.size() != 0)
             {

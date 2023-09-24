@@ -34,7 +34,7 @@ namespace cppnext
                     }
                     else
                     {
-                        NodeData.value += std::get<std::string>(peekToken.value);
+                        NodeData.value += peekToken.value;
                     }
                     position++;
                 }
