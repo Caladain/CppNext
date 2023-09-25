@@ -19,17 +19,7 @@ namespace cppnext
         void SetValue(const tokenType& newType, const std::string& valueString)
         {
             type = newType;
-            switch (type)
-            {
-                case tokenType::AlphaNumeric:
-                case tokenType::NumericAlpha:
-                case tokenType::StringLiteral:
-                case tokenType::CharacterLiteral:
-                {
-                    value = valueString;
-                    break;
-                }                
-            };
+            value = valueString;
         }
         std::string toString() const
         {

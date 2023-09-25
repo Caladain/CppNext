@@ -1,7 +1,10 @@
 #include "lexer/lexer.h"
+#include "errors/errors.h"
 
 #include <cctype>
 #include <fstream>
+#include <memory>
+#include <filesystem>
 
 #include <magic_enum.hpp>
 #include "fmt/core.h"
@@ -77,8 +80,7 @@ namespace cppnext
                 {
                     fmt::print("Prefix: {}\nRawPath: {}\n", prefix.string(), path.string());
                 }
-                fmt::print("Error 0001: File {} Does not exist.\n", prefixedPath.string());
-                throw 0001;
+                ThrowError(1, fmt::format(ErrorTable[1], prefixedPath.string()));
             }
         }        
     }
@@ -356,9 +358,8 @@ namespace cppnext
                 }
                 if (counter < 0)
                 {
-                    fmt::print("Error {}: Lexed {} without an opening {}?\n", 0005, currentSymbol, OpeningSymbol);
-                    fmt::print("{}", FormatDebugToken(newToken, {}));
-                    throw 0005;
+                    fmt::print(ErrorTable[2], currentSymbol, OpeningSymbol);
+                    ThrowError(2, fmt::format("{}", FormatDebugToken(newToken, {})));
                 }
             }
         }
@@ -367,12 +368,12 @@ namespace cppnext
     {
         if (container.size() != 0)
         {
-            fmt::print("Error {}: Lexed a mismatch of {} and {}. Printing all seen {} and {} that are potentially mismatched.\n", 0006, OpeningSymbol, ClosingSymbol, OpeningSymbol, ClosingSymbol);
+            fmt::print(ErrorTable[3], OpeningSymbol, ClosingSymbol, OpeningSymbol, ClosingSymbol);
             for (const auto& token : container)
             {
                 fmt::print("{}", FormatDebugToken(token, {}));
             }
-            throw 0006;
+            ThrowError(3, "");
         }
     }
 

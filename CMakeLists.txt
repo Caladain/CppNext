@@ -10,6 +10,7 @@ find_package(Tracy CONFIG REQUIRED)
 find_package(Threads REQUIRED)
 find_package(cxxopts CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
+find_package(ctre CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 23)
 

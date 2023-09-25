@@ -1,25 +1,16 @@
 #pragma once
 #include <cxxopts.hpp>
 #include "token/token.h"
-#include <filesystem>
 #include <vector>
 #include <string>
-#include <memory>
 #include <tuple>
+#include "lexedFileTable.h"
 
 #include "fmt/os.h"
 
 namespace cppnext {
 
-    
-    struct lexedFile
-    {
-        std::filesystem::path originalPath;
-        std::vector<std::string> originalLines;
-        int32_t fileIndex{ 0 };
-        std::vector<Token> tokens;
-    };
-        
+
     class Lexer {
     public:
         Lexer();
@@ -52,7 +43,7 @@ namespace cppnext {
         Token CreateToken(int32_t fileIndex, int32_t lineNumber, int32_t linePosition, tokenType type, std::string value);
         void HandleOpenCloseCounting(std::vector<Token>& container, int32_t& counter, const char OpeningSymbol, const char ClosingSymbol, const char currentSymbol, Token newToken);
         void ErrorAndPrintIfOpenCloseMismatch(const std::vector<Token>& container, const char OpeningSymbol, const char ClosingSymbol);
-        std::unique_ptr<std::vector<lexedFile>> lexedFiles =  nullptr;
+        
         std::vector<Token> parenContainer;
         int32_t parenCount{ 0 };
         std::vector<Token> braceContainer;
