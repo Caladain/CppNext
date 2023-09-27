@@ -72,7 +72,7 @@ namespace cppnext
                 }
                 foundType = true;
                 NodeData.type = currentToken.type;
-                NodeData.typeValue = currentToken.value;
+                NodeData.typeString = currentToken.value;
                 NodeData.tokens.push_back(currentToken);
                 startPosition++;
                 continue;
@@ -112,7 +112,7 @@ namespace cppnext
                         {
                             return {};
                         }
-                        NodeData.tokens.push_back(currentToken);
+                        NodeData.tokens.push_back(peekToken);
                         foundCloseBrace = true;
                         startPosition++;
                         break;
@@ -130,31 +130,71 @@ namespace cppnext
                 //parsed later during variable type resolution.
                 //
                 //Lets first see if it pairs nicely with the type.
-                if (NodeData.type == tokenType::Keyword_uint8
+                //We check the bounds (max value for example) later so we can do all variables at once.
+                NodeData.valueString = fullExpressionString;
+                if (   NodeData.type == tokenType::Keyword_uint8
                     || NodeData.type == tokenType::Keyword_uint16
                     || NodeData.type == tokenType::Keyword_uint32
                     || NodeData.type == tokenType::Keyword_uint64)
-                {
-                    //We do a digit only check first, then we'll check the ranges.
+                {                    
                     if (ctre::match<"^\\d+[u|U]?$">(fullExpressionString))
                     {
                         //We match digits followed by an optional u or U.
                         uint64_t value = std::stoull(fullExpressionString);
                         newNode.value = value;
-                        if (NodeData.type == tokenType::Keyword_uint8 && value > std::numeric_limits<uint8_t>::max())
-                        {
-                            //throw
-                        }
-                        if (NodeData.type == tokenType::Keyword_uint16 && value > std::numeric_limits<uint16_t>::max())
-                        {
-                            //throw
-                        }
-                        if (NodeData.type == tokenType::Keyword_uint32 && value > std::numeric_limits<uint32_t>::max())
-                        {
-                            //throw
-                        }                        
-                        continue;
+                        NodeData.foundLiteralValue = true;
                     }
+                }
+                if (   NodeData.type == tokenType::Keyword_int8
+                    || NodeData.type == tokenType::Keyword_int16
+                    || NodeData.type == tokenType::Keyword_int32
+                    || NodeData.type == tokenType::Keyword_int64)
+                {
+                    if (ctre::match<"^-?\\d*$">(fullExpressionString))
+                    {
+                        //We match optional minus + digits followed by Nothing.
+                        int64_t value = std::stoll(fullExpressionString);
+                        newNode.value = value;
+                        NodeData.foundLiteralValue = true;
+                    }
+                }
+                if (   NodeData.type == tokenType::Keyword_float16
+                    || NodeData.type == tokenType::Keyword_float32
+                    || NodeData.type == tokenType::Keyword_float64)
+                {
+                    
+                    if (ctre::match<"^-?\\d+[.]?\\d*(?:f64|f32|f16|f)?$">(fullExpressionString))
+                    {
+                        //We match optional minus, digits, optional single period, optional digits, optional f/f16/f32/f64
+                        double_t value = std::stod(fullExpressionString);
+                        newNode.value = value;
+                        NodeData.foundLiteralValue = true;
+                    }
+                }
+                if (NodeData.type == tokenType::Keyword_bool)
+                {
+
+                    if (ctre::match<"^(?:true|false)$">(fullExpressionString))
+                    {
+                        //We match true or false
+                        bool value = fullExpressionString == "true" ? true : false;
+                        newNode.value = value;
+                        NodeData.foundLiteralValue = true;
+                    }
+                }
+                if (NodeData.type == tokenType::Keyword_string)
+                {
+                    //it should be the back token is closing brace.  two back should be the string literal, if it exists.
+                    std::size_t vectorSize = NodeData.tokens.size();
+                    if (vectorSize > 2)
+                    {
+                        if (NodeData.tokens[vectorSize-2].type == tokenType::StringLiteral)
+                        {                            
+                            newNode.value = NodeData.tokens[vectorSize-2].value;
+                            NodeData.foundLiteralValue = true;
+                        }
+                    }
+                    
                 }
                 continue;
             }

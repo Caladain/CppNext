@@ -1,10 +1,20 @@
-u16 myUint{2};
-u16 myUint{-2};
+mut u16 myUint{2342};
+u32 myUint2{2};
+mut u64 myUint2{453254325};
+mut myType myTestType{3029};
+i16 myint{3};
+mut i32 myInt2{-3};
+i64 myInt3{324324};
+
+mut f32 myTestVariable {10.0f};
+f32 myTestVariable2 {-10.5640f32};
+mut f16 myTestVariable3 {10.6540f16};
+f64 myTestVariable4 {-10.6480f64};
+
 c32 mychar {'4'};
 i64 testVar2 {5};
-/* LineOneTest
-LineTwoTest
-LineThree Test */ mut f32 myTestVariable {10.0f};
+
+mut f32 myTestVariable {10.0f32};
 mut bool myBool{true};
 string myString {"LiteralStringTest"};
 
