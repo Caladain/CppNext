@@ -1,0 +1,13 @@
+
+class Test
+{
+	pub float32 myTestVariable {10.0f};
+	i32 myTestInt {-4};
+	public mut i32 myTestInt {-4};
+}
+struct MyStruct
+{
+	f16 mySecondTestVariable {32.f16};
+	private float16 myThirdTestVariable {32.f16};
+	pri f64 myFourthTestVariable{342342.342342f64};
+}

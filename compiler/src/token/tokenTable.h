@@ -73,6 +73,7 @@ namespace cppnext
         Keyword_public,    //public keyword
         Keyword_trait,     //trait keyword
         Keyword_return,    //return keyword
+        Keyword_class,     //class
         Keyword_struct,    //struct keyword
         Keyword_switch,    //switch keyword
         Keyword_throw,     //throw keyword
@@ -82,8 +83,7 @@ namespace cppnext
         Keyword_while,     //while keyword
         Keyword_override,  //override keyword
         Keyword_final,     //final keyword
-        Keyword_import,    //#import keyword
-        Keyword_class,     //class
+        Keyword_import,    //#import keyword        
         Keyword_auto,      //auto
         NamespaceSeperator,//::
         StringLiteral,
@@ -169,11 +169,13 @@ namespace cppnext
         { "new", Keyword_new},
         { "operator", Keyword_operator},
         { "private", Keyword_private},
+        { "pri", Keyword_private},
         { "public", Keyword_public},
         { "pub", Keyword_public },
         { "trait", Keyword_trait},
         { "return", Keyword_return},
         { "struct", Keyword_struct},
+        { "class", Keyword_class },
         { "switch", Keyword_switch},
         { "throw", Keyword_throw},
         { "try", Keyword_try},
@@ -182,8 +184,7 @@ namespace cppnext
         { "while", Keyword_while},
         { "override", Keyword_override},
         { "final", Keyword_final},
-        { "#import", Keyword_import},
-        { "class", Keyword_class },
+        { "#import", Keyword_import},        
         { "auto", Keyword_auto },
         { "::", NamespaceSeperator },
     };

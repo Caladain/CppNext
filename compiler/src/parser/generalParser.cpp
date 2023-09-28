@@ -23,6 +23,21 @@ namespace cppnext
                 }
                 break;
             }
+            case tokenType::Keyword_class:
+            case tokenType::Keyword_struct:
+            {
+                auto result = structNodeParser.ConsumeParse(tokens, position);
+                if (result)
+                {
+                    auto value = result.value();
+                    return value;
+                }
+                else
+                {
+                    //throw;
+                }
+                break;
+            }
             case tokenType::Keyword_namespace:
             {
                 auto result = namespaceNodeParser.ConsumeParse(tokens, position);

@@ -13,6 +13,7 @@
 #include "fmt/os.h"
 //-s N:\Projects\CppNext\compiler\tests\parser -r -o  N:\Projects\CppNext\build --parserdebug
 //-s N:\Projects\CppNext\compiler\tests\parser -f SimpleNamespaceVariablesOnly.cppn -o  N:\Projects\CppNext\build --parserdebug --lexerdebug --lexerdebugtokens
+//-s N:\Projects\CppNext\compiler\tests\parser -f ClassStruct.cppn -o  N:\Projects\CppNext\build --parserdebug --lexerdebug --lexerdebugtokens
 namespace cppnext
 {
     namespace parser

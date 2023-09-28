@@ -11,6 +11,7 @@ namespace cppnext
     std::optional<parser::Node> VariableNode::ConsumeParse(const std::vector<Token>& tokens, int32_t& position)
     {
         int32_t startPosition = position;
+        bool foundPubPri = false;
         bool foundMutable = false;
         bool foundType = false;
         bool foundIdentifer = false;
@@ -23,6 +24,18 @@ namespace cppnext
         while (startPosition < tokens.size())
         {         
             const auto& currentToken = tokens[startPosition];
+            if (currentToken.type == tokenType::Keyword_public || currentToken.type == tokenType::Keyword_private)
+            {
+                if (foundPubPri || foundMutable || foundType)
+                {
+                    return {};
+                }
+                foundPubPri = true;
+                NodeData.publicVariable = currentToken.type == tokenType::Keyword_public ? true : false;
+                NodeData.tokens.push_back(currentToken);
+                startPosition++;
+                continue;
+            }            
             if (currentToken.type == tokenType::Keyword_mutable)
             {
                 if (foundMutable || foundType)
