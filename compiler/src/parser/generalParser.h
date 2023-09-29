@@ -7,6 +7,7 @@
 #include "parser/namespaceNode.h"
 #include "parser/variableNode.h"
 #include "parser/structNode.h"
+#include "parser/functionNode.h"
 #include "token/token.h"
 
 namespace cppnext
@@ -23,5 +24,6 @@ namespace cppnext
         NamespaceNode namespaceNodeParser;
         VariableNode variableNodeParser;
         StructNode structNodeParser;
+        FunctionNode functionNodeParser;
     };
 }

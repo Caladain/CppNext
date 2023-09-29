@@ -83,8 +83,16 @@ namespace cppnext
                 }
                 else
                 {
-                    //Check if it's a function instead
-
+                    auto functionParseResult = functionNodeParser.ConsumeParse(tokens, position);
+                    if (functionParseResult)
+                    {
+                        auto value = functionParseResult.value();
+                        return value;
+                    }
+                    else
+                    {
+                        //Throw
+                    }
                 }
                 break;
             }

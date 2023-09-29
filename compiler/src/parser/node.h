@@ -13,6 +13,7 @@
 #include "parser/namespaceNode.h"
 #include "parser/variableNode.h"
 #include "parser/structNode.h"
+#include "parser/functionNode.h"
 
 
 namespace cppnext::parser
@@ -25,7 +26,8 @@ namespace cppnext::parser
         Import,
         Namespace,
         Variable,
-        Struct
+        Struct,
+        Function
     };
     struct Node {
         std::vector<Node> childNodes;
@@ -34,7 +36,8 @@ namespace cppnext::parser
             ImportNodeData,
             NamespaceNodeData,
             VariableNodeData,
-            StructNodeData> nodeData;
+            StructNodeData,
+            FunctionNodeData> nodeData;
         std::variant<            
             int64_t,            
             uint64_t,
@@ -61,7 +64,8 @@ namespace cppnext::parser
                 [&commandLineOptions, &output, &indent, this](ImportNodeData&) { auto data = std::get<ImportNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
                 [&commandLineOptions, &output, &indent, this](NamespaceNodeData&) { auto data = std::get<NamespaceNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
                 [&commandLineOptions, &output, &indent, this](VariableNodeData&) { auto data = std::get<VariableNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
-                [&commandLineOptions, &output, &indent, this](StructNodeData&) { auto data = std::get<StructNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); }
+                [&commandLineOptions, &output, &indent, this](StructNodeData&) { auto data = std::get<StructNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); },
+                [&commandLineOptions, &output, &indent, this](FunctionNodeData&) { auto data = std::get<FunctionNodeData>(nodeData); output += fmt::format("{} Data:\n{}", indent, data.toString(indent + "    ", commandLineOptions)); }
                 }, nodeData);
             if (childNodes.size() != 0)
             {
