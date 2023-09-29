@@ -21,6 +21,17 @@ namespace cppnext
             while (startPosition < tokens.size())
             {
                 const auto& currentToken = tokens[startPosition];
+                if (foundOpenBrace && currentToken.type != tokenType::CloseBrace)
+                {
+                    auto result = generalParser.ConsumeParse(tokens, startPosition);
+                    if (result)
+                    {
+                        auto value = result.value();
+                        newNode.childNodes.emplace_back(value);
+                        startPosition++;
+                        continue;
+                    }
+                }
                 if (currentToken.type == tokenType::Keyword_class || currentToken.type == tokenType::Keyword_struct)
                 {
                     if (foundClass || foundValidIdentifier)
@@ -30,6 +41,8 @@ namespace cppnext
                     foundClass = true;
                     NodeData.isStruct = currentToken.type == tokenType::Keyword_struct ? true : false;
                     NodeData.tokens.push_back(currentToken);
+                    startPosition++;
+                    continue;
                 }
                 if (currentToken.type == tokenType::AlphaNumeric)
                 {
@@ -40,7 +53,8 @@ namespace cppnext
                     foundValidIdentifier = true;
                     NodeData.tokens.push_back(currentToken);
                     NodeData.identifier = currentToken.value;
-                        
+                    startPosition++;
+                    continue;                        
                 }
                 if (currentToken.type == tokenType::OpenBrace)
                 {
@@ -50,6 +64,8 @@ namespace cppnext
                     }
                     foundOpenBrace = true;
                     NodeData.tokens.push_back(currentToken);
+                    startPosition++;
+                    continue;
                 }
                 if (currentToken.type == tokenType::CloseBrace)
                 {
@@ -59,23 +75,13 @@ namespace cppnext
                     }
                     foundCloseBrace = true;
                     NodeData.tokens.push_back(currentToken);
-                    startPosition++;
                     break;
                 }
-                if (foundOpenBrace)
-                {
-                    auto result = generalParser.ConsumeParse(tokens, startPosition);
-                    if (result)
-                    {
-                        auto value = result.value();
-                        newNode.childNodes.emplace_back(value);
-                    }
-                }
-                startPosition++;
             }
             if (foundOpenBrace && foundCloseBrace)
             {
                 newNode.nodeData = NodeData;
+                position = startPosition;
                 return newNode;
             }
             else

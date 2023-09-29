@@ -17,7 +17,7 @@ namespace cppnext
         {
             std::string output;
             output += fmt::format("{} [NamespaceNodeData] isStruct:{}\n", indent, isStruct);
-            output += fmt::format("{} [NamespaceNodeData] Value:{}\n", indent, identifier);
+            output += fmt::format("{} [NamespaceNodeData] identifier:{}\n", indent, identifier);
             output += fmt::format("{} [NamespaceNodeData] Tokens:\n", indent);
             for (const auto& token : tokens)
             {

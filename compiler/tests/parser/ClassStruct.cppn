@@ -1,13 +1,28 @@
-
-class Test
+namespace myNamespace2
 {
-	pub float32 myTestVariable {10.0f};
-	i32 myTestInt {-4};
-	public mut i32 myTestInt {-4};
-}
-struct MyStruct
-{
-	f16 mySecondTestVariable {32.f16};
-	private float16 myThirdTestVariable {32.f16};
-	pri f64 myFourthTestVariable{342342.342342f64};
+	pub mut f64 myNamespaceVariable {32434.0f};
+	struct MyStruct
+	{
+		class Test
+		{
+			pub float32 myTestVariable2 {10.0f};		
+		}
+		f16 mySecondTestVariable {32.f16};	
+	}
+	namespace myNamespace3
+	{
+		pub i32 myTestVariable4 {10};
+		struct MyStruct
+		{
+			class Test
+			{
+				pub float32 myTestVariable2 {10.0f};
+				i32 myTestInt2 {-4};
+				public mut i32 myTestInt2 {-4};
+			}
+			f16 mySecondTestVariable {32.f16};
+			private float16 myThirdTestVariable {32.f16};
+			pri f64 myFourthTestVariable{342342.342342f64};
+		}
+	}
 }

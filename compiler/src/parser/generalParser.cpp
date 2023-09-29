@@ -52,6 +52,8 @@ namespace cppnext
                 }
                 break;
             }
+            case tokenType::Keyword_public:
+            case tokenType::Keyword_private:
             case tokenType::AlphaNumeric:
             case tokenType::Keyword_bool:
             case tokenType::Keyword_char8:
