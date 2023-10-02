@@ -19,13 +19,13 @@ namespace cppnext {
         Lexer& operator= (const Lexer&) = delete;
         void Lex(const cxxopts::ParseResult& commandLineOptions);
         std::vector<lexedFile>* GetLexedFiles() const;
-        void Print(const cxxopts::ParseResult& commandLineOptions) const;
+        void PrintDebugFiles(const cxxopts::ParseResult& commandLineOptions) const;
+        std::string FormatDebugToken(const Token& token, const cxxopts::ParseResult& commandLineOptions) const;
+        std::string FormatToken(const Token& token, const cxxopts::ParseResult& commandLineOptions) const;
     private:
         void ProcessFilePaths(const cxxopts::ParseResult& commandLineOptions);
         void LexFile(lexedFile& fileToLex, const cxxopts::ParseResult& commandLineOptions);
-        void LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);
-        std::string FormatDebugToken(const Token& token, const cxxopts::ParseResult& commandLineOptions) const;
-        std::string FormatToken(const Token& token, const cxxopts::ParseResult& commandLineOptions) const;
+        void LexLine(int32_t fileIndex, int32_t lineNumber, std::vector<Token>& tokenStream, const std::string& lineToLex, const cxxopts::ParseResult& commandLineOptions);        
         bool IsIdentifierCharacter(const char character) const;
         bool IsNumericalCharacter(const char character) const;
         bool IsValidStartIdentifierCharacter(const char character) const;

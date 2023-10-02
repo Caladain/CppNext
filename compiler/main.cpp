@@ -16,9 +16,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
         ("f,files", "CppNext Input File(s)", cxxopts::value<std::vector<std::string>>())
         ("o,output", "CppNext Output Folder", cxxopts::value<std::string>())
         ("v,verbose", "Verbose Output", cxxopts::value<bool>()->default_value("false"))
+        ("lexeronly", "Only Run The Lexer")
         ("lexerdebug", "Output Lexer Debugging information")
         ("lexerdebugtokens", "Output Lexer Tokens for Debugging")
         ("parserdebug", "Output Parser Debugging information")
+        ("parseronly", "Run the Lexer, followed by the Parser only.")
         ;
     options.parse_positional({ "files" });
     auto result = options.parse(argc, argv);

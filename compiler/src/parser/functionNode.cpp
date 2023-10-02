@@ -15,8 +15,8 @@ namespace cppnext
         bool foundMutable = false;
         bool foundType = false;
         bool foundIdentifer = false;
-        bool foundOpenParen = false;
-        bool foundCloseParen = false;
+        //bool foundOpenParen = false;
+        //bool foundCloseParen = false;
         bool foundOpenBrace = false;
         bool foundCloseBrace = false;
         bool foundCloseSemiColon = false;

@@ -15,7 +15,23 @@ namespace cppnext
 
     void cppnCompiler::ProcessFiles(const cxxopts::ParseResult& commandLineOptions)
     {
-        lexer->Lex(commandLineOptions);
-        parser->Parse(commandLineOptions);
+        bool runLexer = true;
+        bool runParser = true;
+        if (commandLineOptions.count("lexeronly"))
+        {
+            runParser = false;
+        }
+        /*if (commandLineOptions.count("parseronly"))
+        {
+
+        }*/
+        if (runLexer)
+        {
+            lexer->Lex(commandLineOptions);
+        }
+        if(runParser)
+        {
+            parser->Parse(commandLineOptions);
+        }
     }
 }

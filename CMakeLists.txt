@@ -11,11 +11,15 @@ find_package(Threads REQUIRED)
 find_package(cxxopts CONFIG REQUIRED)
 find_package(magic_enum CONFIG REQUIRED)
 find_package(ctre CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 23)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>) #Multiprocessor Compilation
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/WX>) #Warnings as Errors
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/W4>) #Enable warnings level 4.
+
+enable_testing()
+include(GoogleTest)
 
 add_subdirectory(compiler)

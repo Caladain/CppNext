@@ -30,7 +30,7 @@ namespace cppnext
         }
         if (commandLineOptions.count("lexerdebug") || commandLineOptions.count("lexerdebugtokens"))
         {
-            Print(commandLineOptions);
+            PrintDebugFiles(commandLineOptions);
         }
     }
 
@@ -449,7 +449,7 @@ namespace cppnext
         return newToken;
     }
 
-    void Lexer::Print(const cxxopts::ParseResult& commandLineOptions) const
+    void Lexer::PrintDebugFiles(const cxxopts::ParseResult& commandLineOptions) const
     {
         std::filesystem::path outputPathPrefix = ".";
         if (commandLineOptions.count("output"))

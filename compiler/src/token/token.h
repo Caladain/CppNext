@@ -15,7 +15,8 @@ namespace cppnext
         int32_t linePosition{ 0 };
         tokenType type;
         std::string value;
-
+        Token(){}
+        Token(tokenType startingType) : type(startingType){}
         void SetValue(const tokenType& newType, const std::string& valueString)
         {
             type = newType;
