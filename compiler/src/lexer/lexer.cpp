@@ -467,7 +467,7 @@ namespace cppnext
                 outputPath.replace_extension("debug");
                 std::filesystem::create_directories(outputPath.parent_path());
                 auto outputFile = fmt::output_file(outputPath.string());
-                outputFile.print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
+                //outputFile.print("Lexed File[{}] {} Begin\n", file.fileIndex, file.originalPath.string());
                 for (const auto& token : file.tokens)
                 {
                     outputFile.print("{}", FormatDebugToken(token, commandLineOptions));

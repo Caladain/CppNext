@@ -1,0 +1,11 @@
+Lexed File[4] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test005.cppn Begin
+abc_def_ghi_jkl_mnop_  :Line(1)Pos(1)
+^ AlphaNumeric:abc_def_ghi_jkl_mnop_
+_abc_123def_456_  :Line(2)Pos(1)
+^ AlphaNumeric:_abc_123def_456_
+_1234abc__  :Line(3)Pos(1)
+^ AlphaNumeric:_1234abc__
+_ABCDEFGHIJKLMNOP  :Line(4)Pos(1)
+^ AlphaNumeric:_ABCDEFGHIJKLMNOP
+_abcdefghijklmnop  :Line(5)Pos(1)
+^ AlphaNumeric:_abcdefghijklmnop

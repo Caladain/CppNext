@@ -1,0 +1,137 @@
+Lexed File[6] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test010.cppn Begin
+#import format  :Line(1)Pos(1)
+^ Keyword_import
+#import format  :Line(1)Pos(9)
+        ^ AlphaNumeric:format
+class Test  :Line(2)Pos(1)
+^ Keyword_class
+class Test  :Line(2)Pos(7)
+      ^ AlphaNumeric:Test
+{  :Line(3)Pos(1)
+^ OpenBrace
+pub Test()  :Line(4)Pos(2)
+^ Keyword_public
+pub Test()  :Line(4)Pos(6)
+    ^ AlphaNumeric:Test
+pub Test()  :Line(4)Pos(10)
+        ^ OpenParen
+pub Test()  :Line(4)Pos(11)
+         ^ CloseParen
+{  :Line(5)Pos(2)
+^ OpenBrace
+fmt::print("Test");  :Line(6)Pos(3)
+^ AlphaNumeric:fmt
+fmt::print("Test");  :Line(6)Pos(6)
+   ^ NamespaceSeperator
+fmt::print("Test");  :Line(6)Pos(8)
+     ^ AlphaNumeric:print
+fmt::print("Test");  :Line(6)Pos(13)
+          ^ OpenParen
+fmt::print("Test");  :Line(6)Pos(14)
+           ^ StringLiteral:Test
+fmt::print("Test");  :Line(6)Pos(20)
+                 ^ CloseParen
+fmt::print("Test");  :Line(6)Pos(21)
+                  ^ Semicolon
+}  :Line(7)Pos(2)
+^ CloseBrace
+pub void Print()  :Line(8)Pos(2)
+^ Keyword_public
+pub void Print()  :Line(8)Pos(6)
+    ^ Keyword_void
+pub void Print()  :Line(8)Pos(11)
+         ^ AlphaNumeric:Print
+pub void Print()  :Line(8)Pos(16)
+              ^ OpenParen
+pub void Print()  :Line(8)Pos(17)
+               ^ CloseParen
+{  :Line(9)Pos(2)
+^ OpenBrace
+fmt::print("{}",myTestVariable);  :Line(10)Pos(3)
+^ AlphaNumeric:fmt
+fmt::print("{}",myTestVariable);  :Line(10)Pos(6)
+   ^ NamespaceSeperator
+fmt::print("{}",myTestVariable);  :Line(10)Pos(8)
+     ^ AlphaNumeric:print
+fmt::print("{}",myTestVariable);  :Line(10)Pos(13)
+          ^ OpenParen
+fmt::print("{}",myTestVariable);  :Line(10)Pos(14)
+           ^ StringLiteral:{}
+fmt::print("{}",myTestVariable);  :Line(10)Pos(18)
+               ^ Comma
+fmt::print("{}",myTestVariable);  :Line(10)Pos(19)
+                ^ AlphaNumeric:myTestVariable
+fmt::print("{}",myTestVariable);  :Line(10)Pos(33)
+                              ^ CloseParen
+fmt::print("{}",myTestVariable);  :Line(10)Pos(34)
+                               ^ Semicolon
+}  :Line(11)Pos(2)
+^ CloseBrace
+int32 myTestVariable {10};  :Line(12)Pos(2)
+^ Keyword_int32
+int32 myTestVariable {10};  :Line(12)Pos(8)
+      ^ AlphaNumeric:myTestVariable
+int32 myTestVariable {10};  :Line(12)Pos(23)
+                     ^ OpenBrace
+int32 myTestVariable {10};  :Line(12)Pos(24)
+                      ^ NumericAlpha:10
+int32 myTestVariable {10};  :Line(12)Pos(26)
+                        ^ CloseBrace
+int32 myTestVariable {10};  :Line(12)Pos(27)
+                         ^ Semicolon
+}  :Line(13)Pos(1)
+^ CloseBrace
+int32 main(string[] args)  :Line(15)Pos(1)
+^ Keyword_int32
+int32 main(string[] args)  :Line(15)Pos(7)
+      ^ AlphaNumeric:main
+int32 main(string[] args)  :Line(15)Pos(11)
+          ^ OpenParen
+int32 main(string[] args)  :Line(15)Pos(12)
+           ^ Keyword_string
+int32 main(string[] args)  :Line(15)Pos(18)
+                 ^ OpenBracket
+int32 main(string[] args)  :Line(15)Pos(19)
+                  ^ CloseBracket
+int32 main(string[] args)  :Line(15)Pos(21)
+                    ^ AlphaNumeric:args
+int32 main(string[] args)  :Line(15)Pos(25)
+                        ^ CloseParen
+{  :Line(16)Pos(1)
+^ OpenBrace
+Test myTest = new Test();  :Line(17)Pos(2)
+^ AlphaNumeric:Test
+Test myTest = new Test();  :Line(17)Pos(7)
+     ^ AlphaNumeric:myTest
+Test myTest = new Test();  :Line(17)Pos(14)
+            ^ Equals
+Test myTest = new Test();  :Line(17)Pos(16)
+              ^ Keyword_new
+Test myTest = new Test();  :Line(17)Pos(20)
+                  ^ AlphaNumeric:Test
+Test myTest = new Test();  :Line(17)Pos(24)
+                      ^ OpenParen
+Test myTest = new Test();  :Line(17)Pos(25)
+                       ^ CloseParen
+Test myTest = new Test();  :Line(17)Pos(26)
+                        ^ Semicolon
+myTest->Print();  :Line(18)Pos(2)
+^ AlphaNumeric:myTest
+myTest->Print();  :Line(18)Pos(8)
+      ^ ArrowOperator
+myTest->Print();  :Line(18)Pos(10)
+        ^ AlphaNumeric:Print
+myTest->Print();  :Line(18)Pos(15)
+             ^ OpenParen
+myTest->Print();  :Line(18)Pos(16)
+              ^ CloseParen
+myTest->Print();  :Line(18)Pos(17)
+               ^ Semicolon
+return 0;  :Line(19)Pos(2)
+^ Keyword_return
+return 0;  :Line(19)Pos(9)
+       ^ NumericAlpha:0
+return 0;  :Line(19)Pos(10)
+        ^ Semicolon
+}  :Line(20)Pos(1)
+^ CloseBrace

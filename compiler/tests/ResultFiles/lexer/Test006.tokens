@@ -1,0 +1,7 @@
+[AlphaNumeric:fmt]
+[NamespaceSeperator]
+[AlphaNumeric:print]
+[OpenParen]
+[StringLiteral:Test]
+[CloseParen]
+[Semicolon]

@@ -1,0 +1,9 @@
+Lexed File[0] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test001.cppn Begin
+pub Test()  :Line(1)Pos(2)
+^ Keyword_public
+pub Test()  :Line(1)Pos(6)
+    ^ AlphaNumeric:Test
+pub Test()  :Line(1)Pos(10)
+        ^ OpenParen
+pub Test()  :Line(1)Pos(11)
+         ^ CloseParen

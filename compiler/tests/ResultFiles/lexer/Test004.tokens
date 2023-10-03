@@ -1,0 +1,5 @@
+[Keyword_float32]
+[AlphaNumeric:b]
+[Equals]
+[NumericAlpha:10.45f]
+[Semicolon]

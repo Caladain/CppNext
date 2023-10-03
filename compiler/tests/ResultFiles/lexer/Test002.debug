@@ -1,0 +1,21 @@
+Lexed File[1] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test002.cppn Begin
+namespace core::std::test::blah {  :Line(1)Pos(1)
+^ Keyword_namespace
+namespace core::std::test::blah {  :Line(1)Pos(11)
+          ^ AlphaNumeric:core
+namespace core::std::test::blah {  :Line(1)Pos(15)
+              ^ NamespaceSeperator
+namespace core::std::test::blah {  :Line(1)Pos(17)
+                ^ AlphaNumeric:std
+namespace core::std::test::blah {  :Line(1)Pos(20)
+                   ^ NamespaceSeperator
+namespace core::std::test::blah {  :Line(1)Pos(22)
+                     ^ AlphaNumeric:test
+namespace core::std::test::blah {  :Line(1)Pos(26)
+                         ^ NamespaceSeperator
+namespace core::std::test::blah {  :Line(1)Pos(28)
+                           ^ AlphaNumeric:blah
+namespace core::std::test::blah {  :Line(1)Pos(33)
+                                ^ OpenBrace
+}  :Line(2)Pos(1)
+^ CloseBrace

@@ -1,0 +1,15 @@
+Lexed File[5] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test006.cppn Begin
+fmt::print("Test");  :Line(1)Pos(1)
+^ AlphaNumeric:fmt
+fmt::print("Test");  :Line(1)Pos(4)
+   ^ NamespaceSeperator
+fmt::print("Test");  :Line(1)Pos(6)
+     ^ AlphaNumeric:print
+fmt::print("Test");  :Line(1)Pos(11)
+          ^ OpenParen
+fmt::print("Test");  :Line(1)Pos(12)
+           ^ StringLiteral:Test
+fmt::print("Test");  :Line(1)Pos(18)
+                 ^ CloseParen
+fmt::print("Test");  :Line(1)Pos(19)
+                  ^ Semicolon

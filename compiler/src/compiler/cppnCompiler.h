@@ -15,8 +15,9 @@ namespace cppnext {
         ~cppnCompiler();
         cppnCompiler(const cppnCompiler&) = delete;
         cppnCompiler& operator= (const cppnCompiler&) = delete;
-        void ProcessFiles(const cxxopts::ParseResult& commandLineOptions);
+        int ProcessCommandlineArguments(int argc, char** argv);        
     private:
+        void ProcessFiles(const cxxopts::ParseResult& commandLineOptions);
         std::unique_ptr<cppnext::Lexer> lexer;
         std::unique_ptr<cppnext::Parser> parser;
     };

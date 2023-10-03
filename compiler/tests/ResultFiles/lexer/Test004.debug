@@ -1,0 +1,11 @@
+Lexed File[3] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test004.cppn Begin
+float32 b = 10.45f;  :Line(1)Pos(1)
+^ Keyword_float32
+float32 b = 10.45f;  :Line(1)Pos(9)
+        ^ AlphaNumeric:b
+float32 b = 10.45f;  :Line(1)Pos(11)
+          ^ Equals
+float32 b = 10.45f;  :Line(1)Pos(13)
+            ^ NumericAlpha:10.45f
+float32 b = 10.45f;  :Line(1)Pos(19)
+                  ^ Semicolon

@@ -1,0 +1,5 @@
+Lexed File[2] N:\Projects\CppNext\compiler\tests\inputFiles\lexer\Test003.cppn Begin
+#import format  :Line(1)Pos(1)
+^ Keyword_import
+#import format  :Line(1)Pos(9)
+        ^ AlphaNumeric:format
